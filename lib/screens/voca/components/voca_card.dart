@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:jongseo_toeic/constants/voca.dart';
+import 'package:jongseo_toeic/repositorys/voca_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 class VocaCard extends StatefulWidget {
   final Voca voca;
+  // final VocaProvider vocaProvider;
   const VocaCard({
     super.key,
-    required this.voca,
+    // required this.voca, required this.vocaProvider
+    required this.voca
   });
 
   @override
@@ -26,6 +30,8 @@ class _VocaCardState extends State<VocaCard> {
   void setTTS() async {
     await tts.setSharedInstance(true);
   }
+
+  
 
   bool isClick = false;
   double _height = 130;
@@ -76,13 +82,22 @@ class _VocaCardState extends State<VocaCard> {
                       ),
                     ),
                   ),
-                  // InkWell(
-                  //   onTap: () {},
-                  //   child: const Icon(
-                  //     Icons.star,
-                  //     size: 26,
-                  //   ),
-                  // ),
+                  InkWell(
+                    onTap: () async {
+                        // var id =await widget.vocaProvider.insert(Voca(voca: widget.voca.voca, mean: widget.voca.mean));
+                        // print(id);
+
+                        // List<Voca> list  = await widget.vocaProvider.getVocas();
+
+                        // list.forEach((element) {
+                        //   print(element);
+                        // });
+                    },
+                    child: const Icon(
+                      Icons.star,
+                      size: 26,
+                    ),
+                  ),
                 ],
               ),
               Column(

@@ -12,9 +12,19 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          children: [
+            const Text('Saved', 
+             style: TextStyle(fontWeight: FontWeight.w600),),
+          ],
+
+        ),
+      ),
         appBar: AppBar(
           foregroundColor: Colors.white,
           backgroundColor: Colors.white,
+          
           elevation: 0,
           title: const Text(
             'Jongseo Voca',

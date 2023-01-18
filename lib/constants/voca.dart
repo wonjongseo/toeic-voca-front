@@ -1,8 +1,30 @@
 class Voca {
-  final String voca;
-  final String mean;
+  late String voca;
+  late String mean;
+  int? id ;
 
-  const Voca({required this.voca, required this.mean});
+  Voca({required this.voca, required this.mean});
+
+
+  Map<String,dynamic> toMap() {
+    return {
+      'voca' : voca,
+      'mean' : mean,
+      'id' : id ?? -1
+    };
+  }
+
+  Voca.fromMap(Map<String,dynamic> map) {
+    id = map['id'];
+    voca = map['voca'];
+    mean = map['mean'];
+  }
+  
+
+   @override
+  String toString() {
+    return 'Voca{id: $id,voca: $voca, mean: $mean}';
+  }
 
   static List<List<Map<String, String>>> days = [
     [],

@@ -1,11 +1,14 @@
-import 'dart:async';
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/services.dart';
 import 'package:jongseo_toeic/constants/voca.dart';
-import 'package:jongseo_toeic/screens/voca/voca_card.dart';
-
+import 'package:jongseo_toeic/repositorys/voca_provider.dart';
+import 'package:jongseo_toeic/screens/exam/exam_screen.dart';
+import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
+// import 'package:sqflite/sqflite.dart';
+// import 'package:path/path.dart';
 class Vocas extends StatefulWidget {
   final List<Map<String, String>> vocas;
   const Vocas({super.key, required this.vocas});
@@ -15,6 +18,16 @@ class Vocas extends StatefulWidget {
 }
 
 class _VocasState extends State<Vocas> {
+  // VocaProvider vocaProvider = VocaProvider();
+  
+
+  // void initDB () async {
+  //   vocaProvider.getPath();
+  //   vocaProvider.open();
+  // }
+
+ 
+
   bool isEnglish = true;
   @override
   Widget build(BuildContext context) {
@@ -23,6 +36,7 @@ class _VocasState extends State<Vocas> {
       body: ListView(
           children: List.generate(widget.vocas.length, (index) {
         return VocaCard(
+          // vocaProvider : vocaProvider,
           voca: isEnglish
               ? Voca(
                   voca: widget.vocas[index]['voca']!,
@@ -54,7 +68,11 @@ class _VocasState extends State<Vocas> {
       actions: [
         InkWell(
           onTap: () {
-            setState(() {});
+            setState(() {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ExamScreen(vocas: widget.vocas);
+            }));
+            });
           },
           child: const Padding(
             padding: EdgeInsets.all(15.0),
