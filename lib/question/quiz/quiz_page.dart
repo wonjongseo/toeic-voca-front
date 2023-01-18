@@ -16,6 +16,7 @@ class QuizPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
           actions: [
             TextButton(
                 onPressed: _questionController.nextQuestion,

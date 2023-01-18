@@ -13,6 +13,11 @@ class ScorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     QuestionController _qnController = Get.put(QuestionController());
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
