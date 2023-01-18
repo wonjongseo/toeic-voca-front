@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jongseo_toeic/constants/voca.dart';
-import 'package:jongseo_toeic/screens/voca_card.dart';
-import 'package:jongseo_toeic/screens/voca_section.dart';
+import 'package:jongseo_toeic/screens/voca/voca_card.dart';
+import 'package:jongseo_toeic/screens/voca/voca_section.dart';
 
 class DayScreen extends StatefulWidget {
   const DayScreen({super.key, required this.vocas});
