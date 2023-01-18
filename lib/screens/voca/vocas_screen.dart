@@ -1,14 +1,12 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:jongseo_toeic/constants/voca.dart';
+import 'package:jongseo_toeic/question/quiz/quiz_page.dart';
 import 'package:jongseo_toeic/repositorys/voca_provider.dart';
-import 'package:jongseo_toeic/screens/exam/exam_screen.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
-// import 'package:sqflite/sqflite.dart';
-// import 'package:path/path.dart';
+import 'package:get/get.dart';
+
 class Vocas extends StatefulWidget {
   final List<Map<String, String>> vocas;
   const Vocas({super.key, required this.vocas});
@@ -18,15 +16,16 @@ class Vocas extends StatefulWidget {
 }
 
 class _VocasState extends State<Vocas> {
-  // VocaProvider vocaProvider = VocaProvider();
-  
+  VocaProvider vocaProvider = VocaProvider();
+  @override
+  void initState() {
+    super.initState();
+    initDB();
+  }
 
-  // void initDB () async {
-  //   vocaProvider.getPath();
-  //   vocaProvider.open();
-  // }
-
- 
+  void initDB() async {
+    await vocaProvider.initDatabase();
+  }
 
   bool isEnglish = true;
   @override
@@ -36,7 +35,7 @@ class _VocasState extends State<Vocas> {
       body: ListView(
           children: List.generate(widget.vocas.length, (index) {
         return VocaCard(
-          // vocaProvider : vocaProvider,
+          vocaProvider: vocaProvider,
           voca: isEnglish
               ? Voca(
                   voca: widget.vocas[index]['voca']!,
@@ -67,13 +66,15 @@ class _VocasState extends State<Vocas> {
       ),
       actions: [
         InkWell(
-          onTap: () {
-            setState(() {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ExamScreen(vocas: widget.vocas);
-            }));
-            });
-          },
+          onTap: () => Get.to(() => QuizPage()),
+          // onTap: () {
+
+          // setState(() {
+          //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //     return ExamScreen(vocas: widget.vocas);
+          //   }));
+          // });
+          // },
           child: const Padding(
             padding: EdgeInsets.all(15.0),
             child: Center(

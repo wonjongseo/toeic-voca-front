@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/constants/voca.dart';
 import 'package:jongseo_toeic/repositorys/voca_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class VocaCard extends StatefulWidget {
   final Voca voca;
-  // final VocaProvider vocaProvider;
-  const VocaCard({
-    super.key,
-    // required this.voca, required this.vocaProvider
-    required this.voca
-  });
+  final VocaProvider vocaProvider;
+  const VocaCard({super.key, required this.voca, required this.vocaProvider});
 
   @override
   State<VocaCard> createState() => _VocaCardState();
@@ -31,10 +28,8 @@ class _VocaCardState extends State<VocaCard> {
     await tts.setSharedInstance(true);
   }
 
-  
-
   bool isClick = false;
-  double _height = 130;
+  double _height = 120;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -46,117 +41,104 @@ class _VocaCardState extends State<VocaCard> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
           color: Colors.yellow,
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 3),
-              blurRadius: 2,
-              color: const Color(0xFFA600FF).withOpacity(0.25),
-            ),
-          ],
-          gradient: const LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Color(0xFFddd6f3),
-              Color(0xFFfaaca8),
-            ],
-          ),
+          boxShadow: [cBoxShadow],
+          gradient: cLinearGradient,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        tts.speak(widget.voca.voca);
-                      },
-                      child: const Icon(
-                        Icons.mic,
-                        size: 28,
-                      ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    tts.speak(widget.voca.voca);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 4, left: 4),
+                    child: Icon(
+                      Icons.mic,
+                      size: 28,
                     ),
                   ),
-                  InkWell(
-                    onTap: () async {
-                        // var id =await widget.vocaProvider.insert(Voca(voca: widget.voca.voca, mean: widget.voca.mean));
-                        // print(id);
+                ),
+                InkWell(
+                  onTap: () async {
+                    await widget.vocaProvider.insert(
+                        Voca(voca: widget.voca.voca, mean: widget.voca.mean));
 
-                        // List<Voca> list  = await widget.vocaProvider.getVocas();
+                    List<Voca> list = await widget.vocaProvider.getVocas();
 
-                        // list.forEach((element) {
-                        //   print(element);
-                        // });
-                    },
-                    child: const Icon(
+                    list.forEach((element) {
+                      print(element);
+                    });
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 4, right: 8.0),
+                    child: Icon(
                       Icons.star,
                       size: 26,
                     ),
                   ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(
-                    child: Text(widget.voca.voca,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 21,
-                        )),
-                  ),
-                  if (isClick)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40.0),
-                      child: Center(
-                        child: Text(widget.voca.mean),
-                      ),
-                    )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  isClick
-                      ? InkWell(
-                          onTap: () {
-                            setState(() {
-                              _height = 130;
-                              isClick = false;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.keyboard_arrow_up,
-                              size: 28,
-                            ),
-                          ),
-                        )
-                      : InkWell(
-                          onTap: () {
-                            setState(() {
-                              _height = 200;
-                              isClick = true;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 28,
-                            ),
+                ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Center(
+                  child: Text(widget.voca.voca,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 21,
+                      )),
+                ),
+                if (isClick)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40.0),
+                    child: Center(
+                      child: Text(widget.voca.mean),
+                    ),
+                  )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                isClick
+                    ? InkWell(
+                        onTap: () {
+                          setState(() {
+                            _height = 130;
+                            isClick = false;
+                          });
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 4, right: 8.0),
+                          child: Icon(
+                            Icons.keyboard_arrow_up,
+                            size: 28,
                           ),
                         ),
-                ],
-              ),
-            ],
-          ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          setState(() {
+                            _height = 200;
+                            isClick = true;
+                          });
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 4, right: 8.0),
+                          child: Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+              ],
+            ),
+          ],
         ),
       ),
     );

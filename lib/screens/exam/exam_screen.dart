@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/constants/voca.dart';
 
 class ExamScreen extends StatefulWidget {
-
   final List<Map<String, String>> vocas;
   const ExamScreen({super.key, required this.vocas});
 
@@ -17,98 +15,129 @@ class ExamScreen extends StatefulWidget {
 }
 
 class _ExamScreenState extends State<ExamScreen> {
-
+  Color color = Colors.red;
   int index = 0;
   int corretIndex = 0;
-  late List<int> answerIndexList; 
+  List<int> answerIndexList = [0, 1, 2, 4];
 
-  List<int> generateAnswer () {
-    Random random = new Random();
-
+  List<int> generateAnswer() {
+    Random random = Random();
     List<int> answerIndex = List.empty(growable: true);
-    
-    for(int i = 0 ; i < 4 ; i++) {  
+
+    for (int i = 0; i < 4; i++) {
       int randomNumber = random.nextInt(widget.vocas.length);
-      while(answerIndex.contains(randomNumber) ) {
-          randomNumber = random.nextInt(widget.vocas.length);
+      while (answerIndex.contains(randomNumber)) {
+        randomNumber = random.nextInt(widget.vocas.length);
       }
       answerIndex.add(randomNumber);
     }
 
-    if(!answerIndex.contains(index)) {
+    if (!answerIndex.contains(index)) {
       int correctNumber = random.nextInt(4);
       answerIndex[correctNumber] = index;
       corretIndex = correctNumber;
+    } else {
+      for (int i = 0; i < answerIndex.length; i++) {
+        if (answerIndexList[i] == index) {
+          corretIndex = i;
+          break;
+        }
+      }
     }
-    else {
-      corretIndex  = answerIndexList.elementAt(index);
-    }
-   
 
+    print('answerIndex');
+    print(answerIndex);
+    print('correctIndex');
+    print(corretIndex);
     return answerIndex;
-     
   }
 
   @override
   void initState() {
     super.initState();
-    answerIndexList  = generateAnswer();
- }
+    print('initState');
+    answerIndexList = generateAnswer();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    bool isCorrect = false;
+
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
+        title: Text(
+          (index + 1).toString() + '번',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: Column(
         children: [
-          
-          AnimatedContainer(
-            duration: Duration(seconds: 3),
-            child: Center(
-              child: Text(widget.vocas[index]['voca']!),
+          const Spacer(flex: 1),
+          Center(
+            child: Text(
+              widget.vocas[index]['voca']!,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
             ),
           ),
-          const SizedBox(height: 10),
+          const Spacer(flex: 1),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: List.generate(answerIndexList.length, (index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: AnimatedContainer(
-                    duration: Duration(seconds: 3),
-                    height: size.height / 4  - 100,
+                  child: Container(
+                    height: 90,
                     decoration: BoxDecoration(
-                      boxShadow: [
-                        cBoxShadow
-                      ],
-                      gradient: cLinearGradient
+                      color: color,
+                      boxShadow: [cBoxShadow],
+                      // gradient: cLinearGradient,
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: InkWell(
-                      
                       onTap: () async {
-                        if(corretIndex == index) {
-                          print('2222');
+                        if (index == corretIndex) {
+                          setState(() {
+                            print(isCorrect);
+                            isCorrect = true;
+                            color = Colors.pink;
+                            print(isCorrect);
+                          });
                         }
-                        Future.delayed(Duration(milliseconds: 3000), (() {
-                           setState(() {
-                            this.index = this.index + 1;
-                            answerIndexList = generateAnswer();
-                          });  
-                        }));                       
+
+                        if (this.index + 1 == widget.vocas.length) {
+                          return Navigator.pop(context);
+                        } else {}
+
+                        // Future.delayed(
+                        //   Duration(milliseconds: 10),
+                        //   (() {
+                        //     setState(() {
+                        //       this.index = this.index + 1;
+                        //       answerIndexList = generateAnswer();
+                        //     });
+                        //   }),
+                        // );
                       },
-                      child: Center(child: Text(widget.vocas[answerIndexList[index]]['mean']!))
-                      )
+                      child: Center(
+                        child: Text(
+                          widget.vocas[answerIndexList[index]]['mean']!,
+                        ),
+                      ),
+                    ),
                   ),
                 );
               }),
             ),
-          )
+          ),
+          const Spacer(flex: 4),
         ],
-
       ),
     );
-
   }
 }
-
