@@ -11,26 +11,24 @@ import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
 import 'package:get/get.dart';
 
 const String VOCAS_PATH = '/vocas';
-class VocasScreen extends StatefulWidget {
- 
 
+class VocasScreen extends StatefulWidget {
   @override
   State<VocasScreen> createState() => _VocasScreenState();
 }
 
 class _VocasScreenState extends State<VocasScreen> {
-
   late int day;
   late List<Map<String, String>> vocas;
-  List<Map<int,List<Voca>>> map = List.empty(growable: true); 
+  List<Map<int, List<Voca>>> map = List.empty(growable: true);
   QuestionController _questionController = Get.put(QuestionController());
-  
+
   // VocaProvider vocaProvider = VocaProvider();
   @override
   void initState() {
     super.initState();
-     final args  = Get.arguments;
-    vocas =  args['vocas'];
+    final args = Get.arguments;
+    vocas = args['vocas'];
     day = args['day'];
     initDB();
   }
@@ -39,11 +37,9 @@ class _VocasScreenState extends State<VocasScreen> {
     // await vocaProvider.initDatabase();
   }
 
-
   bool isEnglish = true;
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: _appBar(context),
       body: ListView(
@@ -54,20 +50,17 @@ class _VocasScreenState extends State<VocasScreen> {
               ? Voca(
                   voca: vocas[index]['voca']!,
                   mean: vocas[index]['mean']!,
-                  int.parse(vocas[index]['_id']!)
-                )
+                  int.parse(vocas[index]['_id']!))
               : Voca(
                   voca: vocas[index]['mean']!,
                   mean: vocas[index]['voca']!,
-                  int.parse(vocas[index]['_id']!)
-                ),
-            );
+                  int.parse(vocas[index]['_id']!)),
+        );
       })),
     );
   }
 
   AppBar _appBar(BuildContext context) {
-    
     return AppBar(
       foregroundColor: Colors.white,
       backgroundColor: Colors.white,
@@ -78,27 +71,29 @@ class _VocasScreenState extends State<VocasScreen> {
           color: Colors.black,
         ),
         onPressed: () {
-
           Navigator.pop(context);
         },
       ),
       actions: [
-        InkWell(
-          // onTap: 
-          onTap: ()  async {
-            await generateQustion();
-          _questionController.setQuestions(map);
-            Get.to(() => QuizScreen(), arguments: {'day': day} );
+        if (vocas.length > 4)
+          InkWell(
+            // onTap:
+            onTap: () async {
+              await generateQustion();
+              _questionController.setQuestions(map);
+              Get.to(() => QuizScreen(), arguments: {'day': day});
+            },
 
-          },
-    
-          child:  Padding(
-            padding: EdgeInsets.all(15.0),
-            child: Center(
-              child: SvgPicture.asset('assets/svg/book.svg', color: Colors.black, height: 30,),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/svg/book.svg',
+                  height: 30,
+                ),
+              ),
             ),
           ),
-        ),
         InkWell(
           onTap: () {
             setState(() {
@@ -117,41 +112,40 @@ class _VocasScreenState extends State<VocasScreen> {
     );
   }
 
-  Map<int,List<Voca>> generateAnswer(int currentIndex) {
-  Random random = Random();
+  Map<int, List<Voca>> generateAnswer(int currentIndex) {
+    Random random = Random();
 
-  List<int> answerIndex = List.empty(growable: true);
+    List<int> answerIndex = List.empty(growable: true);
 
-  for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
       int randomNumber = random.nextInt(vocas.length);
       while (answerIndex.contains(randomNumber)) {
         randomNumber = random.nextInt(vocas.length);
       }
       answerIndex.add(randomNumber);
-   }
+    }
 
-   int correctIndex = answerIndex.indexOf(currentIndex);
-   if(correctIndex == -1) { 
+    int correctIndex = answerIndex.indexOf(currentIndex);
+    if (correctIndex == -1) {
       int randomNumber = random.nextInt(4);
       answerIndex[randomNumber] = currentIndex;
       correctIndex = randomNumber;
-   }
+    }
 
     List<Voca> answerVoca = List.empty(growable: true);
-    
-    for(int j = 0 ; j < answerIndex.length ;j ++){
-        Voca voca = Voca.fromMap(vocas[answerIndex[j]]);
-        answerVoca.add(voca) ;
+
+    for (int j = 0; j < answerIndex.length; j++) {
+      Voca voca = Voca.fromMap(vocas[answerIndex[j]]);
+      answerVoca.add(voca);
     }
-    
-    return {correctIndex : answerVoca};
-    
+
+    return {correctIndex: answerVoca};
   }
-  
-  Future<void> generateQustion()  async {
-    for(int correntIndex = 0 ; correntIndex  < vocas.length ; correntIndex++) {
-        Map<int, List<Voca>> voca =generateAnswer(correntIndex);
-        map.add(voca);  
+
+  Future<void> generateQustion() async {
+    for (int correntIndex = 0; correntIndex < vocas.length; correntIndex++) {
+      Map<int, List<Voca>> voca = generateAnswer(correntIndex);
+      map.add(voca);
     }
     map.shuffle();
   }

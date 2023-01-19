@@ -14,7 +14,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QuestionController _questionController = Get.put(QuestionController());
-    
+
     return Stack(
       children: [
         SafeArea(
@@ -53,14 +53,16 @@ class Body extends StatelessWidget {
               const Divider(thickness: 1.5),
               const SizedBox(height: kDefaultPadding),
               Expanded(
-                  child: PageView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      controller: _questionController.pageController,
-                      onPageChanged: _questionController.updateTheQnNum,
-                      itemCount: _questionController.questions.length,
-                      itemBuilder: (context, index) => QuestionCard(
-                            question: _questionController.questions[index],
-                          )))
+                child: PageView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _questionController.pageController,
+                  onPageChanged: _questionController.updateTheQnNum,
+                  itemCount: _questionController.questions.length,
+                  itemBuilder: (context, index) => QuestionCard(
+                    question: _questionController.questions[index],
+                  ),
+                ),
+              )
             ],
           ),
         )

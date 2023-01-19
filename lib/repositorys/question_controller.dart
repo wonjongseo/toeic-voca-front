@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/state_manager.dart';
@@ -10,34 +8,53 @@ import 'package:jongseo_toeic/screens/score/score_screen.dart';
 
 class QuestionController extends GetxController
     // ignore: deprecated_member_use
-    with SingleGetTickerProviderMixin {
+    with
+        SingleGetTickerProviderMixin {
   late AnimationController _animationController;
 
   late Animation _animation;
-  
-  late PageController _pageController;
- 
 
-  bool _isWrong  =false;
-  List<Question>  questions = [];
+  late PageController _pageController;
+
+  bool _isWrong = false;
+  List<Question> questions = [];
+  List<Question> wrongQuestions = [];
+
   bool _isAnswered = false;
   int _correctAns = 0;
   late int _selectedAns;
-   RxInt _questionNumber = 1.obs;
-   int _numOfCorrectAns = 0;
+  RxInt _questionNumber = 1.obs;
+  int _numOfCorrectAns = 0;
   String _text = 'skip';
   Color _color = Colors.black;
+  int _day = 0;
 
- void onReflish () {
-        _isAnswered = false;
-        questions = [];
-        _correctAns = 0;
-       _selectedAns = 0;
-       _questionNumber = 1.obs;
-       _numOfCorrectAns = 0;
-       update();
-   }
+  void onReflish() {
+    List<Question> temp = wrongQuestions;
 
+    questions = temp;
+
+    toContinue();
+  }
+
+  void toContinue() {
+    _pageController.dispose();
+    _pageController = PageController();
+    print('asdfasdf');
+    print(wrongQuestions);
+    _questionNumber = 1.obs;
+
+    _isWrong = false;
+
+    questions = wrongQuestions;
+    questions.shuffle();
+    wrongQuestions = [];
+    _isAnswered = false;
+    _correctAns = 0;
+    _selectedAns = 0;
+    _numOfCorrectAns = 0;
+    update();
+  }
 
   PageController get pageController => _pageController;
   Animation get animation => _animation;
@@ -49,19 +66,26 @@ class QuestionController extends GetxController
   int get numOfCorrectAns => _numOfCorrectAns;
   Color get color => _color;
   bool get isWrong => _isWrong;
-  
+  int get day => _day;
 
-   void setQuestions(List<Map<int, List<Voca>>> map) {
-      for (var vocas in map) {
-        for (var e in vocas.entries) {
-          List<Voca> optionsVoca =  e.value;
-          Voca questionVoca = optionsVoca[e.key] ;
-          Question question = Question(question: questionVoca.voca, answer: e.key, options: optionsVoca.map((e) => e.mean).toList());
-          questions.add(question);
-        }
-      }
+  set day(int day) {
+    _day = day;
   }
-  
+
+  void setQuestions(List<Map<int, List<Voca>>> map) {
+    for (var vocas in map) {
+      for (var e in vocas.entries) {
+        List<Voca> optionsVoca = e.value;
+        Voca questionVoca = optionsVoca[e.key];
+        Question question = Question(
+            question: questionVoca.voca,
+            answer: e.key,
+            options: optionsVoca.map((e) => e.mean).toList());
+        questions.add(question);
+      }
+    }
+  }
+
   @override
   void onInit() {
     _animationController =
@@ -90,23 +114,28 @@ class QuestionController extends GetxController
     _animationController.stop();
     update();
     if (_correctAns == _selectedAns) {
-      _text= 'skip';
-      _numOfCorrectAns;
+      _text = 'skip';
+      _numOfCorrectAns++;
       Future.delayed(const Duration(milliseconds: 400), () {
-            nextQuestion();
-      });  
-    }
-    else {
+        nextQuestion();
+      });
+    } else {
+      if (!wrongQuestions.contains(questions[_questionNumber.value - 1])) {
+        wrongQuestions.add(questions[_questionNumber.value - 1]);
+      }
       _isWrong = true;
       _color = Colors.pink;
-      _text = 'next';  
+      _text = 'next';
+
+      Future.delayed(const Duration(milliseconds: 1200), () {
+        nextQuestion();
+      });
     }
   }
 
   void nextQuestion() {
-
     if (_questionNumber.value != questions.length) {
-      _isWrong= false;
+      _isWrong = false;
       _text = 'skip';
       _color = Colors.black;
       _isAnswered = false;
@@ -115,8 +144,21 @@ class QuestionController extends GetxController
 
       _animationController.reset();
       _animationController.forward().whenComplete(nextQuestion);
-    } else
-      Get.to(ScoreScreen());
+    } else {
+      Get.to(const ScoreScreen(), arguments: {'day': day});
+    }
+  }
+
+  void skipQuestion() {
+    _isAnswered = true;
+    _animationController.stop();
+    if (!wrongQuestions.contains(questions[_questionNumber.value - 1])) {
+      wrongQuestions.add(questions[_questionNumber.value - 1]);
+    }
+    _isWrong = true;
+    _color = Colors.pink;
+    _text = 'next';
+    nextQuestion();
   }
 
   void updateTheQnNum(int index) {
