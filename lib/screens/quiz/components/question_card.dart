@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
-import 'package:jongseo_toeic/question/controllers/question_controller.dart';
-import 'package:jongseo_toeic/question/models/Question.dart';
-import 'package:jongseo_toeic/question/quiz/components/option.dart';
+import 'package:jongseo_toeic/repositorys/question_controller.dart';
+import 'package:jongseo_toeic/models/Question.dart';
+import 'package:jongseo_toeic/screens/quiz/components/option.dart';
 
 class QuestionCard extends StatelessWidget {
   const QuestionCard({required this.question});
@@ -32,7 +32,7 @@ class QuestionCard extends StatelessWidget {
           const SizedBox(height: kDefaultPadding / 2),
           ...List.generate(
             question.options.length,
-            (index) => Option(
+          (index) => Option(
               test: question.options[index],
               index: index,
               press: () => _controller.checkAns(question, index),

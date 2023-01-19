@@ -4,10 +4,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
-import 'package:jongseo_toeic/question/controllers/question_controller.dart';
+import 'package:jongseo_toeic/repositorys/question_controller.dart';
 
-class ScorePage extends StatelessWidget {
-  const ScorePage({Key? key}) : super(key: key);
+const SCORE_PATH = '/score';
+class ScoreScreen extends StatelessWidget {
+  const ScoreScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

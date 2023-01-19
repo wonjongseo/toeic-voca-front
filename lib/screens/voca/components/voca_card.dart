@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
-import 'package:jongseo_toeic/constants/voca.dart';
+import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/repositorys/voca_provider.dart';
-import 'package:sqflite/sqflite.dart';
+// import 'package:sqflite/sqflite.dart';
 
 class VocaCard extends StatefulWidget {
   final Voca voca;
-  final VocaProvider vocaProvider;
-  const VocaCard({super.key, required this.voca, required this.vocaProvider});
+  // final VocaProvider vocaProvider;
+  const VocaCard({super.key, required this.voca
+  // , required this.vocaProvider
+  });
 
   @override
   State<VocaCard> createState() => _VocaCardState();
@@ -29,7 +31,7 @@ class _VocaCardState extends State<VocaCard> {
   }
 
   bool isClick = false;
-  double _height = 120;
+  double _height = 100;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -64,14 +66,14 @@ class _VocaCardState extends State<VocaCard> {
                 ),
                 InkWell(
                   onTap: () async {
-                    await widget.vocaProvider.insert(
-                        Voca(voca: widget.voca.voca, mean: widget.voca.mean));
+                    // await widget.vocaProvider.insert(
+                    //     Voca(voca: widget.voca.voca, mean: widget.voca.mean));
 
-                    List<Voca> list = await widget.vocaProvider.getVocas();
+                    // List<Voca> list = await widget.vocaProvider.getVocas();
 
-                    list.forEach((element) {
-                      print(element);
-                    });
+                    // list.forEach((element) {
+                    //   print(element);
+                    // });
                   },
                   child: const Padding(
                     padding: EdgeInsets.only(top: 4, right: 8.0),
@@ -95,7 +97,7 @@ class _VocaCardState extends State<VocaCard> {
                 ),
                 if (isClick)
                   Padding(
-                    padding: const EdgeInsets.only(top: 40.0),
+                    padding: const EdgeInsets.only(top: 20.0),
                     child: Center(
                       child: Text(widget.voca.mean),
                     ),
@@ -109,7 +111,7 @@ class _VocaCardState extends State<VocaCard> {
                     ? InkWell(
                         onTap: () {
                           setState(() {
-                            _height = 130;
+                            _height = 100;
                             isClick = false;
                           });
                         },
@@ -124,7 +126,7 @@ class _VocaCardState extends State<VocaCard> {
                     : InkWell(
                         onTap: () {
                           setState(() {
-                            _height = 200;
+                            _height = 150;
                             isClick = true;
                           });
                         },

@@ -4,9 +4,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
-import 'package:jongseo_toeic/question/controllers/question_controller.dart';
-import 'package:jongseo_toeic/question/quiz/components/progress_bar.dart';
-import 'package:jongseo_toeic/question/quiz/components/question_card.dart';
+import 'package:jongseo_toeic/repositorys/question_controller.dart';
+import 'package:jongseo_toeic/screens/quiz/components/progress_bar.dart';
+import 'package:jongseo_toeic/screens/quiz/components/question_card.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -14,6 +14,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QuestionController _questionController = Get.put(QuestionController());
+    
     return Stack(
       children: [
         SafeArea(

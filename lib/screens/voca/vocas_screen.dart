@@ -1,56 +1,73 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:jongseo_toeic/constants/voca.dart';
-import 'package:jongseo_toeic/question/quiz/quiz_page.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jongseo_toeic/models/voca.dart';
+import 'package:jongseo_toeic/repositorys/question_controller.dart';
+import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/repositorys/voca_provider.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
 import 'package:get/get.dart';
 
-class Vocas extends StatefulWidget {
-  final List<Map<String, String>> vocas;
-  const Vocas({super.key, required this.vocas});
+const String VOCAS_PATH = '/vocas';
+class VocasScreen extends StatefulWidget {
+ 
 
   @override
-  State<Vocas> createState() => _VocasState();
+  State<VocasScreen> createState() => _VocasScreenState();
 }
 
-class _VocasState extends State<Vocas> {
-  VocaProvider vocaProvider = VocaProvider();
+class _VocasScreenState extends State<VocasScreen> {
+
+  late int day;
+  late List<Map<String, String>> vocas;
+  List<Map<int,List<Voca>>> map = List.empty(growable: true); 
+  QuestionController _questionController = Get.put(QuestionController());
+  
+  // VocaProvider vocaProvider = VocaProvider();
   @override
   void initState() {
     super.initState();
+     final args  = Get.arguments;
+    vocas =  args['vocas'];
+    day = args['day'];
     initDB();
   }
 
   void initDB() async {
-    await vocaProvider.initDatabase();
+    // await vocaProvider.initDatabase();
   }
+
 
   bool isEnglish = true;
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar: _appBar(context),
       body: ListView(
-          children: List.generate(widget.vocas.length, (index) {
+          children: List.generate(vocas.length, (index) {
         return VocaCard(
-          vocaProvider: vocaProvider,
+          // vocaProvider: vocaProvider,
           voca: isEnglish
               ? Voca(
-                  voca: widget.vocas[index]['voca']!,
-                  mean: widget.vocas[index]['mean']!,
+                  voca: vocas[index]['voca']!,
+                  mean: vocas[index]['mean']!,
+                  int.parse(vocas[index]['_id']!)
                 )
               : Voca(
-                  voca: widget.vocas[index]['mean']!,
-                  mean: widget.vocas[index]['voca']!,
+                  voca: vocas[index]['mean']!,
+                  mean: vocas[index]['voca']!,
+                  int.parse(vocas[index]['_id']!)
                 ),
-        );
+            );
       })),
     );
   }
 
   AppBar _appBar(BuildContext context) {
+    
     return AppBar(
       foregroundColor: Colors.white,
       backgroundColor: Colors.white,
@@ -61,30 +78,24 @@ class _VocasState extends State<Vocas> {
           color: Colors.black,
         ),
         onPressed: () {
+
           Navigator.pop(context);
         },
       ),
       actions: [
         InkWell(
-          onTap: () => Get.to(() => QuizPage()),
-          // onTap: () {
+          // onTap: 
+          onTap: ()  async {
+            await generateQustion();
+          _questionController.setQuestions(map);
+            Get.to(() => QuizScreen(), arguments: {'day': day} );
 
-          // setState(() {
-          //   Navigator.push(context, MaterialPageRoute(builder: (context) {
-          //     return ExamScreen(vocas: widget.vocas);
-          //   }));
-          // });
-          // },
-          child: const Padding(
+          },
+    
+          child:  Padding(
             padding: EdgeInsets.all(15.0),
             child: Center(
-              child: Text(
-                'test',
-                style: TextStyle(
-                    color: Colors.pink,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-              ),
+              child: SvgPicture.asset('assets/svg/book.svg', color: Colors.black, height: 30,),
             ),
           ),
         ),
@@ -104,5 +115,44 @@ class _VocasState extends State<Vocas> {
         )
       ],
     );
+  }
+
+  Map<int,List<Voca>> generateAnswer(int currentIndex) {
+  Random random = Random();
+
+  List<int> answerIndex = List.empty(growable: true);
+
+  for (int i = 0; i < 4; i++) {
+      int randomNumber = random.nextInt(vocas.length);
+      while (answerIndex.contains(randomNumber)) {
+        randomNumber = random.nextInt(vocas.length);
+      }
+      answerIndex.add(randomNumber);
+   }
+
+   int correctIndex = answerIndex.indexOf(currentIndex);
+   if(correctIndex == -1) { 
+      int randomNumber = random.nextInt(4);
+      answerIndex[randomNumber] = currentIndex;
+      correctIndex = randomNumber;
+   }
+
+    List<Voca> answerVoca = List.empty(growable: true);
+    
+    for(int j = 0 ; j < answerIndex.length ;j ++){
+        Voca voca = Voca.fromMap(vocas[answerIndex[j]]);
+        answerVoca.add(voca) ;
+    }
+    
+    return {correctIndex : answerVoca};
+    
+  }
+  
+  Future<void> generateQustion()  async {
+    for(int correntIndex = 0 ; correntIndex  < vocas.length ; correntIndex++) {
+        Map<int, List<Voca>> voca =generateAnswer(correntIndex);
+        map.add(voca);  
+    }
+    map.shuffle();
   }
 }

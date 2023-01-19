@@ -4,15 +4,15 @@ import 'package:flutter/cupertino.dart';
 BoxShadow cBoxShadow = BoxShadow(
   offset: const Offset(0, 3),
   blurRadius: 2,
-  color: const Color(0xFFA600FF).withOpacity(0.25),
+  color: const Color(0xFF2980B9).withOpacity(0.25),
 );
 
 LinearGradient cLinearGradient = const LinearGradient(
   begin: Alignment.topRight,
   end: Alignment.bottomLeft,
   colors: [
-    Color(0xFFddd6f3),
-    Color(0xFFfaaca8),
+    Color(0xFF2980B9),
+    Color(0xFF6DD5FA),
   ],
 );
 

@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
+import 'package:jongseo_toeic/screens/home/home_screen.dart';
 import 'package:jongseo_toeic/screens/voca/vocas_screen.dart';
 
-class VocaSection extends StatelessWidget {
-  const VocaSection({super.key, required this.vocas});
-  final List<Map<String, String>> vocas;
+const VOCA_STEP_PATH = '/voca-section';
+class VocaStepScreen extends StatelessWidget {
+  const VocaStepScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args  = Get.arguments;
+    final List<Map<String, String>> vocas = args['vocas'];
+    final int day =args['day'];
+    
     int gridCount = vocas.length % 10 == 0
         ? (vocas.length / 10).floor()
         : (vocas.length / 10).ceil();
 
     return Scaffold(
       appBar: AppBar(
+        title: Text('Day ${day}' , style: TextStyle(color: Colors.black),),
         foregroundColor: Colors.white,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -23,7 +30,7 @@ class VocaSection extends StatelessWidget {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Get.offAllNamed(HOME_PATH);
           },
         ),
       ),
@@ -35,22 +42,17 @@ class VocaSection extends StatelessWidget {
         children: List.generate(gridCount, (index) {
           return InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return Vocas(
-                      vocas: index + 1 != gridCount
+              Get.toNamed(VOCAS_PATH , arguments: {
+                  'day': day,
+                  'vocas': index + 1 != gridCount
                           ? vocas.sublist((index * 10), (index * 10 + 10))
                           : vocas.sublist(
                               (index * 10),
                               (index * 10 +
-                                  (vocas.length - (gridCount - 1) * 10)),
-                            ),
-                    );
-                  },
-                ),
-              );
+                                  (vocas.length - (gridCount - 1) * 10)))
+              });
+              
+             
             },
             child: Container(
               padding: const EdgeInsets.all(8.0),

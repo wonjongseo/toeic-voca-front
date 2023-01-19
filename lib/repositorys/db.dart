@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:jongseo_toeic/constants/voca.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:jongseo_toeic/models/voca.dart';
+// import 'package:sqflite/sqflite.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
