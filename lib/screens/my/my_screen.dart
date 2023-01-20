@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/repositorys/question_controller.dart';
@@ -42,7 +43,9 @@ class _MyScreenState extends State<MyScreen> {
     super.dispose();
   }
 
-  void createMyVoca(String voca, String mean) {
+  void createMyVoca() {
+    String voca = _vocaTextEditingController.value.text;
+    String mean = _meanTextEditingController.value.text;
     Voca newVoca = Voca(voca: voca, mean: mean, id:  1);
     
     print(vocas);
@@ -58,43 +61,51 @@ class _MyScreenState extends State<MyScreen> {
     
     return Scaffold(
       appBar: _appBar(context),
-      body: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  MyInputEditer(hintText:'Input your voca' , labelText: 'voca', size : size,  textEditingController :_vocaTextEditingController),
-                  const SizedBox(height: 10),
-                  MyInputEditer(hintText:'Input your mean' , labelText: 'mean', size : size,  textEditingController :_meanTextEditingController),
-                ],
-              ),
-               const SizedBox(width: 10),
-               ElevatedButton(
-                onPressed: () {
-                  String voca = _vocaTextEditingController.value.text;
-                  String mean = _meanTextEditingController.value.text;
-                  setState(() {
-                    createMyVoca(_vocaTextEditingController.value.text, _meanTextEditingController.value.text);
-                  });
-                }, 
-                child: Icon(Icons.add,  size: 14,)
-                )
-            ],
-          ),
-        
-        
-          SingleChildScrollView(
-            child: Column(
+      body: SingleChildScrollView(
+        child: Column(        
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            
+            Container(
+              padding: const EdgeInsets.only(left: 30 , bottom: 20),
+              child: Text('Input your voca', 
+              style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),),
+            ),
+            
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    MyInputEditer(hintText:'Input your voca' , labelText: 'voca', size : size,  textEditingController :_vocaTextEditingController),
+                    const SizedBox(height: 10),
+                    MyInputEditer(hintText:'Input your mean' , labelText: 'mean', size : size,  textEditingController :_meanTextEditingController),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                        onPressed: () {
+                            setState(() {
+                              createMyVoca();
+                            });
+                      }, 
+                       child: Expanded(child: Icon(Icons.add,  size: 14,))
+                    )
+                  ],
+                ),
+                 const SizedBox(width: 10),
+                 
+              ],
+            ),
+            if(vocas.isNotEmpty)
+            Divider(),
+            Column(
               children: List.generate(vocas.length, (index) {
                 // return VocaCard(voca: Voca.fromMap(vocas[index]));
                 return VocaCard(voca: vocas[index]);
               }),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -121,13 +132,11 @@ class _MyScreenState extends State<MyScreen> {
       actions: [
         if (vocas.length > 3)
           InkWell(
-            // onTap:
             onTap: ()  {
                map = Question.generateQustion(vocas);
               _questionController.setQuestions(map);
               Get.to(() => QuizScreen(), arguments: {'day': day});
             },
-
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Center(
@@ -164,28 +173,26 @@ class MyInputEditer extends StatelessWidget {
   final String labelText, hintText;
   @override
   Widget build(BuildContext context) {
-    return  SizedBox(
+    return  Container(
+         height: 40,
+         decoration: BoxDecoration(
+          boxShadow: [cBoxShadow],
+          gradient: cLinearGradient,
+          borderRadius: BorderRadius.circular(10)
+         ),
          width: size.width * 0.5,
-         child: TextField(
-           controller: textEditingController,
-           decoration: InputDecoration(
-             labelText: labelText,
-             hintText: hintText,
-       
-             focusedBorder:  OutlineInputBorder(
-               borderRadius: BorderRadius.circular(10),
-               borderSide: BorderSide(width: 1, color: Colors.redAccent),
+         child: Padding(
+           padding: const EdgeInsets.only(left: 10),
+           child: TextField(
+             controller: textEditingController,
+             decoration: InputDecoration(
+               labelText: labelText,
+               border: InputBorder.none
+               
              ),
-             enabledBorder: OutlineInputBorder(
-               borderRadius: BorderRadius.circular(10),
-               borderSide: BorderSide(width: 1, color: Colors.redAccent),
-             ),
-             border: OutlineInputBorder(
-               borderRadius: BorderRadius.circular(10),
-               borderSide: BorderSide(width: 1, color: Colors.redAccent),
-             )
+             style: TextStyle(fontSize: 12),
+             keyboardType: TextInputType.text,
            ),
-           keyboardType: TextInputType.text,
          ),
        );
   }

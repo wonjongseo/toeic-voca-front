@@ -11,7 +11,7 @@ class VocasController extends GetxController {
 
     List<List<Voca>> get vocasOfDay => _vocasOfDay;
 
-    List<Voca>  getStepVocas (int step) => _vocasOfDay[step];
+    List<Voca>  getStepVocas  (int step) => _vocasOfDay[step];
 
     int get getVocasOfDayCnt => _vocasOfDay.length;
 

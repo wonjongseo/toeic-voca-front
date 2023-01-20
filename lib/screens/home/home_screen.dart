@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/screens/home/components/day_card.dart';
+import 'package:jongseo_toeic/screens/my/my_screen.dart';
 
 const String HOME_PATH  = '/';
 class HomeScreen extends StatelessWidget {
@@ -22,7 +23,13 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black),
           ),
           actions : [
-            SvgPicture.asset('assets/svg/profile.svg' )
+            Padding(
+                padding: const EdgeInsets.only(right: 20),
+              child: IconButton(onPressed: () {
+                  Get.toNamed(MY_PATH);
+              }, icon: Icon(Icons.person, size: 33, color: Colors.black,),),
+            )
+            
           ]
         ),
         
@@ -35,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 20),
                 );
               } else {
-                return  DayCard(index: index);
+                return  DayCard(day: index);
             }
          },
       ),

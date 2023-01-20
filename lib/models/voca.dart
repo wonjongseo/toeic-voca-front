@@ -2,10 +2,15 @@ class Voca {
    late String voca;
    late String mean;
    late int id;
-
+   bool isMine = false;
   static late List<List<Voca>> daysObj  ;
 
   Voca({required this.id, required this.voca, required this.mean });
+  
+  Voca.mine({required this.id, required this.voca, required this.mean }) {
+      Voca(id: id,voca: voca,mean: mean);
+      isMine = true;
+  }
   
   static jsonToObject() {
     daysObj = List.empty(growable: true);

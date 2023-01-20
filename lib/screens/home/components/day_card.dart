@@ -8,10 +8,10 @@ import 'package:jongseo_toeic/screens/voca/voca_step_screen.dart';
 class DayCard extends StatelessWidget {
   const DayCard({
     Key? key,
-    required this.index,
+    required this.day,
   }) : super(key: key);
 
-  final int index;
+  final int day;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,8 @@ class DayCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Get.toNamed(VOCA_STEP_PATH, arguments: {
-            'day': index,
-            'vocas': Voca.getDay(index),
+            'day': day,
+            'vocas': Voca.getDay(day),
           });
         },
         child: Container(
@@ -45,7 +45,7 @@ class DayCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Day $index',
+                    'Day $day',
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
@@ -58,7 +58,7 @@ class DayCard extends StatelessWidget {
                         width: size.width / 1.5,
                         child: LinearProgressIndicator(
                           color: Colors.greenAccent,
-                          value: (0.1 * index),
+                          value: (0.1 * day),
                         ),
                       ),
                     ],
@@ -69,9 +69,9 @@ class DayCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(' 0 / ${Voca.getCountOfDay(index)}'),
+                  Text(' 0 / ${Voca.getCountOfDay(day)}'),
                   const SizedBox(height: 20),
-                  Center(child: Text('${((0.1 * index) * 100).ceil()} %'))
+                  Center(child: Text('${((0.1 * day) * 100).ceil()} %'))
                 ],
               ),
             ],

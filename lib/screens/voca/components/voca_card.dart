@@ -6,11 +6,13 @@ import 'package:jongseo_toeic/repositorys/voca_provider.dart';
 // import 'package:sqflite/sqflite.dart';
 
 class VocaCard extends StatefulWidget {
-  final Voca voca;
+ 
   // final VocaProvider vocaProvider;
   const VocaCard({super.key, required this.voca
   // , required this.vocaProvider
   });
+  
+  final Voca voca;
 
   @override
   State<VocaCard> createState() => _VocaCardState();
@@ -65,7 +67,15 @@ class _VocaCardState extends State<VocaCard> {
                     ),
                   ),
                 ),
-                InkWell(
+               widget.voca.isMine ? const InkWell(
+                child: Padding(
+                    padding: EdgeInsets.only(top: 4, right: 8.0),
+                    child:  Icon(
+                         Icons.delete  ,
+                      size: 26,
+                    ),
+                  ),
+               ) :  InkWell(
                   onTap: () async {
                     // await widget.vocaProvider.insert(
                     //     Voca(voca: widget.voca.voca, mean: widget.voca.mean));
@@ -78,8 +88,8 @@ class _VocaCardState extends State<VocaCard> {
                   },
                   child: const Padding(
                     padding: EdgeInsets.only(top: 4, right: 8.0),
-                    child: Icon(
-                      Icons.star,
+                    child:  Icon(
+                         Icons.star  ,
                       size: 26,
                     ),
                   ),
