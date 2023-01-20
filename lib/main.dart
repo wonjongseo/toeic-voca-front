@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jongseo_toeic/constants/constatns.dart';
+import 'package:jongseo_toeic/screens/my/my_screen.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/home/home_screen.dart';
 import 'package:jongseo_toeic/screens/score/score_screen.dart';
@@ -26,12 +26,12 @@ class MyApp extends StatelessWidget {
         bodyText1: GoogleFonts.oswald(textStyle: textTheme.bodyText1),
         ),
       ),
-     
       title: 'Jongseo Voca',
-      home: const HomeScreen(),
+      home: const MyScreen(),
       
       getPages: [
         GetPage(name: HOME_PATH, page: () => const HomeScreen()),
+        GetPage(name: MY_PATH, page: () => const MyScreen()),
         GetPage(name: VOCA_STEP_PATH, page: () => const VocaStepScreen()),
         GetPage(name: VOCAS_PATH, page: () =>  VocasScreen()),
         GetPage(name: QUIZ_PATH, page: () =>  QuizScreen()),

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/repositorys/question_controller.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
@@ -37,6 +38,16 @@ class _VocasScreenState extends State<VocasScreen> {
     // await vocaProvider.initDatabase();
   }
 
+  Voca flipMean(bool isEnglish, int index) {
+    Voca voca; 
+    if(isEnglish) {
+       voca =  Voca(voca: vocas[index]['voca']!,mean: vocas[index]['mean']!);
+    }else {
+       voca =  Voca(voca: vocas[index]['mean']!,mean: vocas[index]['voca']!);
+    }
+    voca.id = int.parse(vocas[index]['_id']!);
+    return voca;
+  }
   bool isEnglish = true;
   @override
   Widget build(BuildContext context) {
@@ -45,16 +56,18 @@ class _VocasScreenState extends State<VocasScreen> {
       body: ListView(
           children: List.generate(vocas.length, (index) {
         return VocaCard(
+          voca: flipMean(isEnglish, index),
           // vocaProvider: vocaProvider,
-          voca: isEnglish
-              ? Voca(
-                  voca: vocas[index]['voca']!,
-                  mean: vocas[index]['mean']!,
-                  int.parse(vocas[index]['_id']!))
-              : Voca(
-                  voca: vocas[index]['mean']!,
-                  mean: vocas[index]['voca']!,
-                  int.parse(vocas[index]['_id']!)),
+          // voca: isEnglish
+          //     ? Voca(
+          //         voca: vocas[index]['voca']!,
+          //         mean: vocas[index]['mean']!,
+          //         int.parse(vocas[index]['_id']!))
+          //     : Voca(
+          //         voca: vocas[index]['mean']!,
+          //         mean: vocas[index]['voca']!,
+          //         int.parse(vocas[index]['_id']!)),
+          
         );
       })),
     );
@@ -65,6 +78,10 @@ class _VocasScreenState extends State<VocasScreen> {
       foregroundColor: Colors.white,
       backgroundColor: Colors.white,
       elevation: 0,
+       title: Text(
+          'Day ${day}',
+          style: TextStyle(color: Colors.black),
+        ),
       leading: IconButton(
         icon: const Icon(
           Icons.arrow_back_ios,
@@ -75,11 +92,11 @@ class _VocasScreenState extends State<VocasScreen> {
         },
       ),
       actions: [
-        if (vocas.length > 4)
+        if (vocas.length > 3)
           InkWell(
             // onTap:
             onTap: () async {
-              await generateQustion();
+              await Question.generateQustion(vocas);
               _questionController.setQuestions(map);
               Get.to(() => QuizScreen(), arguments: {'day': day});
             },
@@ -112,41 +129,5 @@ class _VocasScreenState extends State<VocasScreen> {
     );
   }
 
-  Map<int, List<Voca>> generateAnswer(int currentIndex) {
-    Random random = Random();
-
-    List<int> answerIndex = List.empty(growable: true);
-
-    for (int i = 0; i < 4; i++) {
-      int randomNumber = random.nextInt(vocas.length);
-      while (answerIndex.contains(randomNumber)) {
-        randomNumber = random.nextInt(vocas.length);
-      }
-      answerIndex.add(randomNumber);
-    }
-
-    int correctIndex = answerIndex.indexOf(currentIndex);
-    if (correctIndex == -1) {
-      int randomNumber = random.nextInt(4);
-      answerIndex[randomNumber] = currentIndex;
-      correctIndex = randomNumber;
-    }
-
-    List<Voca> answerVoca = List.empty(growable: true);
-
-    for (int j = 0; j < answerIndex.length; j++) {
-      Voca voca = Voca.fromMap(vocas[answerIndex[j]]);
-      answerVoca.add(voca);
-    }
-
-    return {correctIndex: answerVoca};
-  }
-
-  Future<void> generateQustion() async {
-    for (int correntIndex = 0; correntIndex < vocas.length; correntIndex++) {
-      Map<int, List<Voca>> voca = generateAnswer(correntIndex);
-      map.add(voca);
-    }
-    map.shuffle();
-  }
+  
 }

@@ -17,21 +17,22 @@ class VocaCard extends StatefulWidget {
 }
 
 class _VocaCardState extends State<VocaCard> {
-  final FlutterTts tts = FlutterTts();
-  @override
-  void initState() {
-    super.initState();
-    setTTS();
-    tts.setLanguage('en');
-    tts.setSpeechRate(0.4);
-  }
+  // final FlutterTts tts = FlutterTts();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   setTTS();
+  //   tts.setLanguage('en');
+  //   tts.setSpeechRate(0.4);
+  // }
 
-  void setTTS() async {
-    await tts.setSharedInstance(true);
-  }
+  // void setTTS() async {
+  //   await tts.setSharedInstance(true);
+  // }
 
   bool isClick = false;
   double _height = 100;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,7 +55,7 @@ class _VocaCardState extends State<VocaCard> {
               children: [
                 InkWell(
                   onTap: () {
-                    tts.speak(widget.voca.voca);
+                    // tts.speak(widget.voca.voca);
                   },
                   child: const Padding(
                     padding: EdgeInsets.only(top: 4, left: 4),
@@ -93,7 +94,8 @@ class _VocaCardState extends State<VocaCard> {
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 21,
-                      )),
+                        overflow: TextOverflow.clip
+                      ),),
                 ),
                 if (isClick)
                   Padding(

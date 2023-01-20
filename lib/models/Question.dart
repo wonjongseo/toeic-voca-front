@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:jongseo_toeic/models/voca.dart';
 
 class Question {
@@ -11,5 +13,47 @@ class Question {
   @override
   String toString() {
     return 'Question{answer: $answer,question: $question, options: $options}';
+  }
+
+  static Map<int, List<Voca>> generateAnswer(List<Map<String, String>> vocas, int currentIndex) {
+    Random random = Random();
+
+    List<int> answerIndex = List.empty(growable: true);
+
+    for (int i = 0; i < 4; i++) {
+      int randomNumber = random.nextInt(vocas.length);
+      while (answerIndex.contains(randomNumber)) {
+        randomNumber = random.nextInt(vocas.length);
+      }
+      answerIndex.add(randomNumber);
+    }
+
+    int correctIndex = answerIndex.indexOf(currentIndex);
+    if (correctIndex == -1) {
+      int randomNumber = random.nextInt(4);
+      answerIndex[randomNumber] = currentIndex;
+      correctIndex = randomNumber;
+    }
+
+    List<Voca> answerVoca = List.empty(growable: true);
+
+    for (int j = 0; j < answerIndex.length; j++) {
+      Voca voca = Voca.fromMap(vocas[answerIndex[j]]);
+      answerVoca.add(voca);
+    }
+
+    return {correctIndex: answerVoca};
+  }
+
+  static List<Map<int, List<Voca>>> generateQustion(List<Map<String, String>> vocas) {
+    List<Map<int, List<Voca>>> map = List.empty(growable: true);
+    
+    for (int correntIndex = 0; correntIndex < vocas.length; correntIndex++) {
+      Map<int, List<Voca>> voca = generateAnswer(vocas, correntIndex);
+      map.add(voca);
+    }
+    map.shuffle();
+
+    return map;
   }
 }

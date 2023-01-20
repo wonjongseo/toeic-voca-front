@@ -1,10 +1,12 @@
 class Voca {
    late String voca;
    late String mean;
-   late int _id;
+   late int? _id;
 
-  int get id => _id; 
-  Voca(this._id, {required this.voca, required this.mean});
+  int get id => _id!; 
+  set id(int id ) => _id = id;
+
+  Voca({required this.voca, required this.mean});
 
   Map<String, dynamic> toMap() {
     return {'voca': voca, 'mean': mean};
@@ -15,7 +17,8 @@ class Voca {
   Voca.fromMap(Map<String, dynamic> map) {
     voca = map['voca']!;
     mean = map['mean']!;
-    _id = int.parse(map['_id']);
+    if(map.keys.contains('_id'))
+      _id = int.parse(map['_id']);
   }
 
   @override

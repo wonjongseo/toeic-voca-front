@@ -28,24 +28,13 @@ class QuestionController extends GetxController
   String _text = 'skip';
   Color _color = Colors.black;
   int _day = 0;
-
-  void onReflish() {
-    List<Question> temp = wrongQuestions;
-
-    questions = temp;
-
-    toContinue();
-  }
+  bool _isEnd = false;
 
   void toContinue() {
     _pageController.dispose();
     _pageController = PageController();
-    print('asdfasdf');
-    print(wrongQuestions);
     _questionNumber = 1.obs;
-
     _isWrong = false;
-
     questions = wrongQuestions;
     questions.shuffle();
     wrongQuestions = [];
@@ -67,6 +56,7 @@ class QuestionController extends GetxController
   Color get color => _color;
   bool get isWrong => _isWrong;
   int get day => _day;
+  bool get isEnd => _isEnd;
 
   set day(int day) {
     _day = day;
@@ -102,6 +92,7 @@ class QuestionController extends GetxController
 
   @override
   void onClose() {
+    print("questionController onClose");
     _animationController.dispose();
     _pageController.dispose();
     super.onClose();
@@ -145,6 +136,13 @@ class QuestionController extends GetxController
       _animationController.reset();
       _animationController.forward().whenComplete(nextQuestion);
     } else {
+      if(questions.length == numOfCorrectAns)  {
+        print('questions.length');
+        print(questions.length);
+        print('numOfCorrectAns');
+        print(numOfCorrectAns);
+        _isEnd = true;
+      }
       Get.to(const ScoreScreen(), arguments: {'day': day});
     }
   }

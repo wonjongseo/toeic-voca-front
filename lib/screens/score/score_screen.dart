@@ -18,6 +18,8 @@ class ScoreScreen extends StatelessWidget {
     QuestionController _qnController = Get.put(QuestionController());
     var args = Get.arguments;
     int day = args['day'];
+    print('_qnController.isEnd');
+    print(_qnController.isEnd);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -84,17 +86,9 @@ class ScoreScreen extends StatelessWidget {
                   }),
                 ),
               ),
-              Spacer(flex: 1),
-              _qnController.wrongQuestions.isNotEmpty
+              
+              _qnController.isEnd
                   ? ScoreButton(
-                      day: day,
-                      text: 'Continue',
-                      onPress: () {
-                        _qnController.toContinue();
-                        Get.toNamed(QUIZ_PATH, arguments: {'day': day});
-                      },
-                    )
-                  : ScoreButton(
                       day: day,
                       text: 'Exit',
                       onPress: () {
@@ -102,6 +96,13 @@ class ScoreScreen extends StatelessWidget {
                           'day': day,
                           'vocas': Voca.getDay(day),
                         });
+                      },
+                    ) : ScoreButton(
+                      day: day,
+                      text: 'Continue',
+                      onPress: () {
+                        _qnController.toContinue();
+                        Get.toNamed(QUIZ_PATH, arguments: {'day': day});
                       },
                     ),
               Spacer(flex: 3),
@@ -128,13 +129,9 @@ class ScoreButton extends StatelessWidget {
   Widget build(BuildContext context) {
     QuestionController qnController = Get.find<QuestionController>();
     return OutlinedButton(
-      onPressed: () {
-        qnController.toContinue();
-        Get.toNamed(QUIZ_PATH, arguments: {'day': day});
-      },
-      child: const Text(
-        'Continue',
-        style: TextStyle(color: Colors.black),
+      onPressed: onPress,
+      child:  Text(
+        text,style: TextStyle(color: Colors.black),
       ),
     );
   }
