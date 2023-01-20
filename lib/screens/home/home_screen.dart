@@ -13,6 +13,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int daysCount =  Voca.getDayCount();
+    
     return Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
@@ -29,13 +31,12 @@ class HomeScreen extends StatelessWidget {
                   Get.toNamed(MY_PATH);
               }, icon: Icon(Icons.person, size: 33, color: Colors.black,),),
             )
-            
           ]
         ),
         
         body: ListView(
           children: List.generate(
-            Voca.getDayCount(),
+            daysCount,
             (index) {
               if (index == 0) {
                 return Container(

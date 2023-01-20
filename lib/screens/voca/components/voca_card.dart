@@ -6,12 +6,9 @@ import 'package:jongseo_toeic/repositorys/voca_provider.dart';
 // import 'package:sqflite/sqflite.dart';
 
 class VocaCard extends StatefulWidget {
- 
-  // final VocaProvider vocaProvider;
-  const VocaCard({super.key, required this.voca
-  // , required this.vocaProvider
-  });
+   VocaCard({super.key,this.onPress, required this.voca});
   
+  VoidCallback? onPress;
   final Voca voca;
 
   @override
@@ -43,12 +40,7 @@ class _VocaCardState extends State<VocaCard> {
         curve: Curves.fastOutSlowIn,
         duration: const Duration(microseconds: 0),
         height: _height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: Colors.yellow,
-          boxShadow: [cBoxShadow],
-          gradient: cLinearGradient,
-        ),
+        decoration:cBoxDecoration,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -63,20 +55,29 @@ class _VocaCardState extends State<VocaCard> {
                     padding: EdgeInsets.only(top: 4, left: 4),
                     child: Icon(
                       Icons.mic,
-                      size: 28,
+                      size: 23,
                     ),
                   ),
                 ),
-               widget.voca.isMine ? const InkWell(
-                child: Padding(
+               widget.voca.isMine ? 
+                 InkWell(
+                  onTap: widget.onPress!,
+                  child: const Padding(
                     padding: EdgeInsets.only(top: 4, right: 8.0),
                     child:  Icon(
-                         Icons.delete  ,
-                      size: 26,
+                         Icons.remove  ,
+                      size: 28,
                     ),
                   ),
                ) :  InkWell(
-                  onTap: () async {
+                   child: const Padding(
+                    padding: EdgeInsets.only(top: 4, right: 8.0),
+                    child:  Icon(
+                         Icons.star  ,
+                      size: 26,
+                    ),
+                  ),
+                   onTap: () async {
                     // await widget.vocaProvider.insert(
                     //     Voca(voca: widget.voca.voca, mean: widget.voca.mean));
 
@@ -85,14 +86,7 @@ class _VocaCardState extends State<VocaCard> {
                     // list.forEach((element) {
                     //   print(element);
                     // });
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.only(top: 4, right: 8.0),
-                    child:  Icon(
-                         Icons.star  ,
-                      size: 26,
-                    ),
-                  ),
+                  }
                 ),
               ],
             ),

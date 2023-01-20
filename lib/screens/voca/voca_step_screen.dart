@@ -34,7 +34,7 @@ class VocaStepScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back_ios,
+           g Icons.arrow_back_ios,
             color: Colors.black,
           ),
           onPressed: () {
@@ -61,10 +61,7 @@ class VocaStepScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(8.0),
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                boxShadow: [cBoxShadow],
-                gradient: cLinearGradient,
-              ),
+              decoration: cBoxDecoration,
               child: GridTile(
                 footer: Center(
                   child: index + 1 != gridCount

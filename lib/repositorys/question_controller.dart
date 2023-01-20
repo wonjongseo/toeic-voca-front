@@ -60,7 +60,6 @@ class QuestionController extends GetxController
   }
 
   void setQuestions(List<Map<int, List<Voca>>> map) {
-    print(map);
     for (var vocas in map) {
       for (var e in vocas.entries) {
         List<Voca> optionsVoca = e.value;
@@ -72,7 +71,6 @@ class QuestionController extends GetxController
         questions.add(question);
       }
     }
-    print(questions);
   }
 
   @override
@@ -91,7 +89,6 @@ class QuestionController extends GetxController
 
   @override
   void onClose() {
-    print("questionController onClose");
     _animationController.dispose();
     _pageController.dispose();
     super.onClose();
@@ -136,10 +133,6 @@ class QuestionController extends GetxController
       _animationController.forward().whenComplete(nextQuestion);
     } else {
       if(questions.length == numOfCorrectAns)  {
-        print('questions.length');
-        print(questions.length);
-        print('numOfCorrectAns');
-        print(numOfCorrectAns);
         _isEnd = true;
       }
       Get.to(const ScoreScreen(), arguments: {'day': day});

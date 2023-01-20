@@ -13,6 +13,13 @@ class DayCard extends StatelessWidget {
 
   final int day;
 
+  Color getColor (double range) {
+    if(range > 0 &&  range < 0.1) return  Colors.redAccent;
+    else if(range < 0.35) return Colors.yellowAccent;
+    else if(range < 0.65) return Colors.orangeAccent;
+    else return Colors.greenAccent;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -31,12 +38,13 @@ class DayCard extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 30),
           height: 90,
           width: size.width / 1.15,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            color: Colors.yellow,
-            boxShadow: [cBoxShadow],
-            gradient: cLinearGradient,
-          ),
+          // decoration: BoxDecoration(
+          //   borderRadius: BorderRadius.circular(8.0),
+          //   color: Colors.yellow,
+          //   boxShadow: [cBoxShadow],
+          //   gradient: cLinearGradient,
+          // ),
+          decoration: cBoxDecoration,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -56,9 +64,13 @@ class DayCard extends StatelessWidget {
                       SizedBox(
                         height: 10,
                         width: size.width / 1.5,
-                        child: LinearProgressIndicator(
-                          color: Colors.greenAccent,
-                          value: (0.1 * day),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinearProgressIndicator(
+                            backgroundColor : Colors.grey.withOpacity(0.2),
+                            color: getColor(0.1 * day),
+                            value: (0.1 * day),
+                          ),
                         ),
                       ),
                     ],

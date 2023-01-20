@@ -52,19 +52,9 @@ class _VocasScreenState extends State<VocasScreen> {
       appBar: _appBar(context),
       body: ListView(
           children: List.generate(vocas.length, (index) {
-        return VocaCard(
-          voca: flipMean(isEnglish, index),
-          // vocaProvider: vocaProvider,
-          // voca: isEnglish
-          //     ? Voca(
-          //         voca: vocas[index]['voca']!,
-          //         mean: vocas[index]['mean']!,
-          //         int.parse(vocas[index]['_id']!))
-          //     : Voca(
-          //         voca: vocas[index]['mean']!,
-          //         mean: vocas[index]['voca']!,
-          //         int.parse(vocas[index]['_id']!)),
-          
+        return   VocaCard(
+          voca: flipMean(isEnglish, index)
+          // vocaProvider: vocaProvider,         
         );
       })),
     );

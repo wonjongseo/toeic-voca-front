@@ -54,11 +54,7 @@ class ScoreScreen extends StatelessWidget {
                     return Container(
                       margin: const EdgeInsets.only(
                           left: 30, right: 30, bottom: 15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [cBoxShadow],
-                        gradient: cLinearGradient,
-                      ),
+                      decoration: cBoxDecoration,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
