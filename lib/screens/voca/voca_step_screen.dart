@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
+import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/repositorys/question_controller.dart';
 import 'package:jongseo_toeic/screens/home/home_screen.dart';
 import 'package:jongseo_toeic/screens/voca/vocas_screen.dart';
@@ -13,7 +14,7 @@ class VocaStepScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments;
-    final List<Map<String, String>> vocas = args['vocas'];
+    final List<Voca> vocas = args['vocas'];
     final int day = args['day'];
 
     int gridCount = vocas.length % 10 == 0

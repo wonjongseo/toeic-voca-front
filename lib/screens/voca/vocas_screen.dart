@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,7 +5,6 @@ import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/repositorys/question_controller.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
-import 'package:jongseo_toeic/repositorys/voca_provider.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
 import 'package:get/get.dart';
 
@@ -20,9 +17,9 @@ class VocasScreen extends StatefulWidget {
 
 class _VocasScreenState extends State<VocasScreen> {
   late int day;
-  late List<Map<String, String>> vocas;
+  late List<Voca> vocas;
   List<Map<int, List<Voca>>> map = List.empty(growable: true);
-  QuestionController _questionController = Get.put(QuestionController());
+  final QuestionController _questionController = Get.put(QuestionController());
 
   // VocaProvider vocaProvider = VocaProvider();
   @override
@@ -41,11 +38,11 @@ class _VocasScreenState extends State<VocasScreen> {
   Voca flipMean(bool isEnglish, int index) {
     Voca voca; 
     if(isEnglish) {
-       voca =  Voca(voca: vocas[index]['voca']!,mean: vocas[index]['mean']!);
+       voca =  Voca(voca: vocas[index].voca,mean: vocas[index].mean,id: vocas[index].id);
     }else {
-       voca =  Voca(voca: vocas[index]['mean']!,mean: vocas[index]['voca']!);
+       voca =  Voca(voca: vocas[index].mean,mean: vocas[index].voca,id: vocas[index].id);
     }
-    voca.id = int.parse(vocas[index]['_id']!);
+    
     return voca;
   }
   bool isEnglish = true;
@@ -96,7 +93,7 @@ class _VocasScreenState extends State<VocasScreen> {
           InkWell(
             // onTap:
             onTap: () async {
-              await Question.generateQustion(vocas);
+               map =  await Question.generateQustion(vocas);
               _questionController.setQuestions(map);
               Get.to(() => QuizScreen(), arguments: {'day': day});
             },

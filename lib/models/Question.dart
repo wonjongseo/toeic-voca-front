@@ -15,7 +15,7 @@ class Question {
     return 'Question{answer: $answer,question: $question, options: $options}';
   }
 
-  static Map<int, List<Voca>> generateAnswer(List<Map<String, String>> vocas, int currentIndex) {
+  static Map<int, List<Voca>> generateAnswer(List<Voca> vocas, int currentIndex) {
     Random random = Random();
 
     List<int> answerIndex = List.empty(growable: true);
@@ -38,14 +38,19 @@ class Question {
     List<Voca> answerVoca = List.empty(growable: true);
 
     for (int j = 0; j < answerIndex.length; j++) {
-      Voca voca = Voca.fromMap(vocas[answerIndex[j]]);
+      Map<String, dynamic> temp = {
+        "id" : vocas[answerIndex[j]].id.toString(),
+        'voca': vocas[answerIndex[j]].voca,
+        'mean': vocas[answerIndex[j]].mean,
+      };
+      Voca voca = Voca.fromMap(temp);
       answerVoca.add(voca);
     }
 
     return {correctIndex: answerVoca};
   }
 
-  static List<Map<int, List<Voca>>> generateQustion(List<Map<String, String>> vocas) {
+  static List<Map<int, List<Voca>>> generateQustion(List<Voca> vocas) {
     List<Map<int, List<Voca>>> map = List.empty(growable: true);
     
     for (int correntIndex = 0; correntIndex < vocas.length; correntIndex++) {

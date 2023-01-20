@@ -15,7 +15,7 @@ class QuizScreen extends StatelessWidget {
     final args = Get.arguments;
     int day = args['day'];
 
-    QuestionController _questionController = Get.find<QuestionController>();
+    QuestionController _questionController = Get.put(QuestionController());
     _questionController.day = day;
 
     return Scaffold(

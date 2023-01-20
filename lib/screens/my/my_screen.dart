@@ -19,7 +19,7 @@ class MyScreen extends StatefulWidget {
 class _MyScreenState extends State<MyScreen> {
   List<Map<int, List<Voca>>> map = List.empty(growable: true);
   int day=  1;
-  QuestionController _questionController = Get.put(QuestionController());
+  final QuestionController _questionController = Get.put(QuestionController());
   bool isEnglish= false;
   List<Voca> vocas = List.empty(growable: true);
   // List<Map<String,String>> vocas = List.empty(growable: true);
@@ -43,8 +43,8 @@ class _MyScreenState extends State<MyScreen> {
   }
 
   void createMyVoca(String voca, String mean) {
-    Voca newVoca = Voca(voca: voca, mean: mean);
-    newVoca.id = 1;
+    Voca newVoca = Voca(voca: voca, mean: mean, id:  1);
+    
     print(vocas);
     // vocas.add({voca :mean});
     vocas.add(newVoca);
@@ -122,8 +122,8 @@ class _MyScreenState extends State<MyScreen> {
         if (vocas.length > 3)
           InkWell(
             // onTap:
-            onTap: () async {
-              await Question.generateQustion(vocas as List<Map<String,String>>);
+            onTap: ()  {
+               map = Question.generateQustion(vocas);
               _questionController.setQuestions(map);
               Get.to(() => QuizScreen(), arguments: {'day': day});
             },

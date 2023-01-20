@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/state_manager.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/screens/score/score_screen.dart';
 
 class QuestionController extends GetxController
-    // ignore: deprecated_member_use
     with
         SingleGetTickerProviderMixin {
   late AnimationController _animationController;
@@ -63,6 +60,7 @@ class QuestionController extends GetxController
   }
 
   void setQuestions(List<Map<int, List<Voca>>> map) {
+    print(map);
     for (var vocas in map) {
       for (var e in vocas.entries) {
         List<Voca> optionsVoca = e.value;
@@ -74,6 +72,7 @@ class QuestionController extends GetxController
         questions.add(question);
       }
     }
+    print(questions);
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/screens/my/my_screen.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/home/home_screen.dart';
@@ -9,6 +10,7 @@ import 'package:jongseo_toeic/screens/voca/voca_step_screen.dart';
 import 'package:jongseo_toeic/screens/voca/vocas_screen.dart';
 
 void main() {
+  Voca.jsonToObject();
   runApp(const MyApp());
 }
 
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       title: 'Jongseo Voca',
-      home: const MyScreen(),
+      home: const HomeScreen(),
       
       getPages: [
         GetPage(name: HOME_PATH, page: () => const HomeScreen()),

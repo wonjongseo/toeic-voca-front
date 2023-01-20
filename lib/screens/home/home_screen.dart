@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/models/voca.dart';
@@ -20,7 +21,11 @@ class HomeScreen extends StatelessWidget {
             'Jongseo Voca',
             style: TextStyle(color: Colors.black),
           ),
+          actions : [
+            SvgPicture.asset('assets/svg/profile.svg' )
+          ]
         ),
+        
         body: ListView(
           children: List.generate(
             Voca.getDayCount(),
@@ -31,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                 );
               } else {
                 return  DayCard(index: index);
-              }
+            }
          },
       ),
     )
