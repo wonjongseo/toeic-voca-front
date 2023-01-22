@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/models/voca.dart';
-import 'package:jongseo_toeic/repositorys/voca_provider.dart';
 // import 'package:sqflite/sqflite.dart';
 
 class VocaCard extends StatefulWidget {
-   VocaCard({super.key,this.onPress, required this.voca});
-  
+  VocaCard({super.key, this.onPress, required this.voca});
+
   VoidCallback? onPress;
   final Voca voca;
 
@@ -40,7 +39,7 @@ class _VocaCardState extends State<VocaCard> {
         curve: Curves.fastOutSlowIn,
         duration: const Duration(microseconds: 0),
         height: _height,
-        decoration:cBoxDecoration,
+        decoration: cBoxDecoration,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -59,47 +58,48 @@ class _VocaCardState extends State<VocaCard> {
                     ),
                   ),
                 ),
-               widget.voca.isMine ? 
-                 InkWell(
-                  onTap: widget.onPress!,
-                  child: const Padding(
-                    padding: EdgeInsets.only(top: 4, right: 8.0),
-                    child:  Icon(
-                         Icons.remove  ,
-                      size: 28,
-                    ),
-                  ),
-               ) :  InkWell(
-                   child: const Padding(
-                    padding: EdgeInsets.only(top: 4, right: 8.0),
-                    child:  Icon(
-                         Icons.star  ,
-                      size: 26,
-                    ),
-                  ),
-                   onTap: () async {
-                    // await widget.vocaProvider.insert(
-                    //     Voca(voca: widget.voca.voca, mean: widget.voca.mean));
+                widget.voca.isMine
+                    ? InkWell(
+                        onTap: widget.onPress!,
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 4, right: 8.0),
+                          child: Icon(
+                            Icons.remove,
+                            size: 28,
+                          ),
+                        ),
+                      )
+                    : InkWell(
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 4, right: 8.0),
+                          child: Icon(
+                            Icons.star,
+                            size: 26,
+                          ),
+                        ),
+                        onTap: () async {
+                          // await widget.vocaProvider.insert(
+                          //     Voca(voca: widget.voca.voca, mean: widget.voca.mean));
 
-                    // List<Voca> list = await widget.vocaProvider.getVocas();
+                          // List<Voca> list = await widget.vocaProvider.getVocas();
 
-                    // list.forEach((element) {
-                    //   print(element);
-                    // });
-                  }
-                ),
+                          // list.forEach((element) {
+                          //   print(element);
+                          // });
+                        }),
               ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Center(
-                  child: Text(widget.voca.voca,
-                      style: const TextStyle(
+                  child: Text(
+                    widget.voca.voca,
+                    style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 21,
-                        overflow: TextOverflow.clip
-                      ),),
+                        overflow: TextOverflow.clip),
+                  ),
                 ),
                 if (isClick)
                   Padding(

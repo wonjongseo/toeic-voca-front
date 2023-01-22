@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
+import 'package:jongseo_toeic/constants/question_controller.dart';
 import 'package:jongseo_toeic/models/voca.dart';
-import 'package:jongseo_toeic/repositorys/question_controller.dart';
+import 'package:jongseo_toeic/screens/home/home_screen.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/screens/voca/voca_step_screen.dart';
@@ -18,10 +19,22 @@ class ScoreScreen extends StatelessWidget {
     QuestionController _qnController = Get.put(QuestionController());
     var args = Get.arguments;
     int day = args['day'];
-    print('_qnController.isEnd');
-    print(_qnController.isEnd);
+    _qnController.day = day;
+
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Get.offAndToNamed(VOCA_STEP_PATH, arguments: {
+              'day': day,
+              'vocas': Voca.getDay(day),
+            });
+          },
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
@@ -36,14 +49,14 @@ class ScoreScreen extends StatelessWidget {
                 "Score",
                 style: Theme.of(context)
                     .textTheme
-                    .headline3!
+                    .displaySmall!
                     .copyWith(color: kSecondaryColor),
               ),
               Text(
                 "${_qnController.numOfCorrectAns} / ${_qnController.questions.length}",
                 style: Theme.of(context)
                     .textTheme
-                    .headline4!
+                    .headlineMedium!
                     .copyWith(color: kSecondaryColor),
               ),
               const Spacer(flex: 1),
@@ -58,7 +71,7 @@ class ScoreScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
+                          SizedBox(
                               width: size.width / 2 - 20,
                               height: 50,
                               child: Center(
@@ -67,7 +80,7 @@ class ScoreScreen extends StatelessWidget {
                               )),
                           const SizedBox(width: 10),
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               width: size.width / 2 - 20,
                               height: 50,
                               child: Center(
@@ -82,7 +95,6 @@ class ScoreScreen extends StatelessWidget {
                   }),
                 ),
               ),
-              
               _qnController.isEnd
                   ? ScoreButton(
                       day: day,
@@ -93,7 +105,8 @@ class ScoreScreen extends StatelessWidget {
                           'vocas': Voca.getDay(day),
                         });
                       },
-                    ) : ScoreButton(
+                    )
+                  : ScoreButton(
                       day: day,
                       text: 'Continue',
                       onPress: () {
@@ -126,8 +139,9 @@ class ScoreButton extends StatelessWidget {
     QuestionController qnController = Get.find<QuestionController>();
     return OutlinedButton(
       onPressed: onPress,
-      child:  Text(
-        text,style: TextStyle(color: Colors.black),
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.black),
       ),
     );
   }

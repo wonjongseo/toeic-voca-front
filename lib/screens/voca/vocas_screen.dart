@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jongseo_toeic/constants/question_controller.dart';
 import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/voca.dart';
-import 'package:jongseo_toeic/repositorys/question_controller.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
 import 'package:get/get.dart';
@@ -11,52 +10,60 @@ import 'package:get/get.dart';
 const String VOCAS_PATH = '/vocas';
 
 class VocasScreen extends StatefulWidget {
+  const VocasScreen({super.key});
+
   @override
   State<VocasScreen> createState() => _VocasScreenState();
 }
 
 class _VocasScreenState extends State<VocasScreen> {
   late int day;
+  late int step;
   late List<Voca> vocas;
   List<Map<int, List<Voca>>> map = List.empty(growable: true);
   final QuestionController _questionController = Get.put(QuestionController());
 
-  // VocaProvider vocaProvider = VocaProvider();
   @override
   void initState() {
     super.initState();
     final args = Get.arguments;
     vocas = args['vocas'];
     day = args['day'];
-    initDB();
-  }
-
-  void initDB() async {
-    // await vocaProvider.initDatabase();
+    step = args['step'];
+    _questionController.day = day;
+    _questionController.step = step;
   }
 
   Voca flipMean(bool isEnglish, int index) {
-    Voca voca; 
-    if(isEnglish) {
-       voca =  Voca(voca: vocas[index].voca,mean: vocas[index].mean,id: vocas[index].id);
-    }else {
-       voca =  Voca(voca: vocas[index].mean,mean: vocas[index].voca,id: vocas[index].id);
+    Voca voca;
+    if (isEnglish) {
+      voca = Voca(
+          voca: vocas[index].voca,
+          mean: vocas[index].mean,
+          id: vocas[index].id);
+    } else {
+      voca = Voca(
+          voca: vocas[index].mean,
+          mean: vocas[index].voca,
+          id: vocas[index].id);
     }
-    
+
     return voca;
   }
+
   bool isEnglish = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
       body: ListView(
-          children: List.generate(vocas.length, (index) {
-        return   VocaCard(
-          voca: flipMean(isEnglish, index)
-          // vocaProvider: vocaProvider,         
-        );
-      })),
+        children: List.generate(
+          vocas.length,
+          (index) {
+            return VocaCard(voca: flipMean(isEnglish, index));
+          },
+        ),
+      ),
     );
   }
 
@@ -65,10 +72,10 @@ class _VocasScreenState extends State<VocasScreen> {
       foregroundColor: Colors.white,
       backgroundColor: Colors.white,
       elevation: 0,
-       title: Text(
-          'Day ${day}',
-          style: TextStyle(color: Colors.black),
-        ),
+      title: Text(
+        'Day $day',
+        style: const TextStyle(color: Colors.black),
+      ),
       leading: IconButton(
         icon: const Icon(
           Icons.arrow_back_ios,
@@ -82,10 +89,10 @@ class _VocasScreenState extends State<VocasScreen> {
         if (vocas.length > 3)
           InkWell(
             // onTap:
-            onTap: () async {
-               map =  await Question.generateQustion(vocas);
+            onTap: () {
+              map = Question.generateQustion(vocas);
               _questionController.setQuestions(map);
-              Get.to(() => QuizScreen(), arguments: {'day': day});
+              Get.toNamed(QUIZ_PATH, arguments: {'day': day, 'step': step});
             },
 
             child: Padding(
@@ -115,6 +122,4 @@ class _VocasScreenState extends State<VocasScreen> {
       ],
     );
   }
-
-  
 }

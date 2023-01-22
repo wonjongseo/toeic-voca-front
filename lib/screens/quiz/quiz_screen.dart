@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
+import 'package:jongseo_toeic/constants/question_controller.dart';
 import 'package:jongseo_toeic/models/voca.dart';
-import 'package:jongseo_toeic/repositorys/question_controller.dart';
 import 'package:jongseo_toeic/screens/quiz/components/body.dart';
 
 import 'package:get/get.dart';
@@ -14,9 +14,11 @@ class QuizScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = Get.arguments;
     int day = args['day'];
+    int step = args['step'];
 
     QuestionController _questionController = Get.put(QuestionController());
     _questionController.day = day;
+    _questionController.step = step;
 
     return Scaffold(
         extendBodyBehindAppBar: true,

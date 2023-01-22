@@ -1,39 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/models/voca.dart';
+import 'package:jongseo_toeic/mvvm/model/score_repository.dart';
 import 'package:jongseo_toeic/screens/home/components/day_card.dart';
 import 'package:jongseo_toeic/screens/my/my_screen.dart';
 
-const String HOME_PATH  = '/';
+const String HOME_PATH = '/';
+
 class HomeScreen extends StatelessWidget {
-  
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+  late ScoreRepositry scoreRepositry;
 
   @override
   Widget build(BuildContext context) {
-    int daysCount =  Voca.getDayCount();
-    
+    int daysCount = Voca.getDayCount();
+    scoreRepositry = ScoreRepositry();
+
     return Scaffold(
         appBar: AppBar(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: const Text(
-            'Jongseo Voca',
-            style: TextStyle(color: Colors.black),
-          ),
-          actions : [
-            Padding(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: const Text(
+              'Jongseo Voca',
+              style: TextStyle(color: Colors.black),
+            ),
+            actions: [
+              Padding(
                 padding: const EdgeInsets.only(right: 20),
-              child: IconButton(onPressed: () {
-                  Get.toNamed(MY_PATH);
-              }, icon: Icon(Icons.person, size: 33, color: Colors.black,),),
-            )
-          ]
-        ),
-        
+                child: IconButton(
+                  onPressed: () {
+                    Get.toNamed(MY_PATH);
+                  },
+                  icon: const Icon(
+                    Icons.person,
+                    size: 33,
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            ]),
         body: ListView(
           children: List.generate(
             daysCount,
@@ -43,12 +49,10 @@ class HomeScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 20),
                 );
               } else {
-                return  DayCard(day: index);
-            }
-         },
-      ),
-    )
- );
+                return DayCard(day: index);
+              }
+            },
+          ),
+        ));
   }
 }
-

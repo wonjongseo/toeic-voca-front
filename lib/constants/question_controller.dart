@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/models/voca.dart';
 import 'package:jongseo_toeic/models/Question.dart';
+import 'package:jongseo_toeic/mvvm/controller/day_of_score_contoller.dart';
+import 'package:jongseo_toeic/mvvm/hive/score.dart';
+import 'package:jongseo_toeic/mvvm/model/score_repository.dart';
 import 'package:jongseo_toeic/screens/score/score_screen.dart';
 
 class QuestionController extends GetxController
-    with
-        SingleGetTickerProviderMixin {
+    with SingleGetTickerProviderMixin {
   late AnimationController _animationController;
-
   late Animation _animation;
-
+  late ScoreRepositry _scoreRepositry;
   late PageController _pageController;
 
   bool _isWrong = false;
   List<Question> questions = [];
   List<Question> wrongQuestions = [];
 
+  int step = 0;
   bool _isAnswered = false;
   int _correctAns = 0;
   late int _selectedAns;
@@ -24,7 +26,7 @@ class QuestionController extends GetxController
   int _numOfCorrectAns = 0;
   String _text = 'skip';
   Color _color = Colors.black;
-  int _day = 0;
+  int day = 0;
   bool _isEnd = false;
 
   void toContinue() {
@@ -52,29 +54,11 @@ class QuestionController extends GetxController
   int get numOfCorrectAns => _numOfCorrectAns;
   Color get color => _color;
   bool get isWrong => _isWrong;
-  int get day => _day;
   bool get isEnd => _isEnd;
-
-  set day(int day) {
-    _day = day;
-  }
-
-  void setQuestions(List<Map<int, List<Voca>>> map) {
-    for (var vocas in map) {
-      for (var e in vocas.entries) {
-        List<Voca> optionsVoca = e.value;
-        Voca questionVoca = optionsVoca[e.key];
-        Question question = Question(
-            question: questionVoca.voca,
-            answer: e.key,
-            options: optionsVoca.map((e) => e.mean).toList());
-        questions.add(question);
-      }
-    }
-  }
 
   @override
   void onInit() {
+    _scoreRepositry = ScoreRepositry();
     _animationController =
         AnimationController(duration: Duration(seconds: 60), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
@@ -91,11 +75,32 @@ class QuestionController extends GetxController
   void onClose() {
     _animationController.dispose();
     _pageController.dispose();
+    updateCount();
     super.onClose();
+  }
+
+  void setQuestions(List<Map<int, List<Voca>>> map) {
+    for (var vocas in map) {
+      for (var e in vocas.entries) {
+        List<Voca> optionsVoca = e.value;
+        Voca questionVoca = optionsVoca[e.key];
+        Question question = Question(
+            question: questionVoca.voca,
+            answer: e.key,
+            options: optionsVoca.map((e) => e.mean).toList());
+        questions.add(question);
+      }
+    }
+  }
+
+  void updateCount() async {
+    Score score = Score(day: day, step: step, score: _numOfCorrectAns);
+    await _scoreRepositry.insert(score);
   }
 
   void checkAns(Question question, int selectedIndex) {
     _isAnswered = true;
+
     _correctAns = question.answer;
     _selectedAns = selectedIndex;
     _animationController.stop();
@@ -132,7 +137,7 @@ class QuestionController extends GetxController
       _animationController.reset();
       _animationController.forward().whenComplete(nextQuestion);
     } else {
-      if(questions.length == numOfCorrectAns)  {
+      if (questions.length == numOfCorrectAns) {
         _isEnd = true;
       }
       Get.to(const ScoreScreen(), arguments: {'day': day});
@@ -140,6 +145,7 @@ class QuestionController extends GetxController
   }
 
   void skipQuestion() {
+    _numOfCorrectAns++;
     _isAnswered = true;
     _animationController.stop();
     if (!wrongQuestions.contains(questions[_questionNumber.value - 1])) {
