@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
+import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/voca.dart';
-import 'package:jongseo_toeic/mvvm/hive/score.dart';
-import 'package:jongseo_toeic/mvvm/model/score_repository.dart';
+import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/home/home_screen.dart';
 import 'package:jongseo_toeic/screens/voca/vocas_screen.dart';
 

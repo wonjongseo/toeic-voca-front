@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:jongseo_toeic/mvvm/hive/score.dart';
-import 'package:jongseo_toeic/mvvm/model/score_repository.dart';
+import 'package:jongseo_toeic/models/score/score.dart';
+import 'package:jongseo_toeic/repository/score_repository.dart';
 
 class ScoreController extends GetxController {
   late ScoreRepositry scoreRepositry;

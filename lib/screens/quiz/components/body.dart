@@ -5,7 +5,6 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
-import 'package:jongseo_toeic/mvvm/controller/day_of_score_contoller.dart';
 import 'package:jongseo_toeic/screens/quiz/components/progress_bar.dart';
 import 'package:jongseo_toeic/screens/quiz/components/question_card.dart';
 

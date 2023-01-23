@@ -16,7 +16,7 @@ class Question {
   }
 
   static Map<int, List<Voca>> generateAnswer(
-      List<Voca> vocas, int currentIndex) {
+    List<Voca> vocas, int currentIndex) {
     Random random = Random();
 
     List<int> answerIndex = List.empty(growable: true);

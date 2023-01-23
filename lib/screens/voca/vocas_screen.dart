@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
 import 'package:jongseo_toeic/models/Question.dart';
+import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/voca.dart';
+import 'package:jongseo_toeic/repository/known_voca_repositry.dart';
+import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
 import 'package:get/get.dart';
@@ -20,9 +23,8 @@ class _VocasScreenState extends State<VocasScreen> {
   late int day;
   late int step;
   late List<Voca> vocas;
-  List<Map<int, List<Voca>>> map = List.empty(growable: true);
   final QuestionController _questionController = Get.put(QuestionController());
-
+   KnownVocaRepositry knownVocaRepositry = KnownVocaRepositry();
   @override
   void initState() {
     super.initState();
@@ -54,20 +56,31 @@ class _VocasScreenState extends State<VocasScreen> {
   bool isEnglish = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(context),
-      body: ListView(
-        children: List.generate(
-          vocas.length,
-          (index) {
-            return VocaCard(voca: flipMean(isEnglish, index));
-          },
-        ),
-      ),
-    );
+    return FutureBuilder(
+      future: knownVocaRepositry.selectKnwonVocas('$day-$step'),
+      builder: (context, snapshot) {
+      if(snapshot.hasError) {
+        return SafeArea(child: Text(snapshot.error.toString()));
+      }
+      return _body(context,snapshot);
+    });
   }
 
-  AppBar _appBar(BuildContext context) {
+  Scaffold _body(BuildContext context,AsyncSnapshot snapshot) {
+    return Scaffold(
+    appBar: _appBar(context, snapshot),
+    body: ListView(
+      children: List.generate(
+        vocas.length,
+        (index) {
+          return VocaCard(voca: flipMean(isEnglish, index));
+        },
+      ),
+    ),
+  );
+  }
+
+  AppBar _appBar(BuildContext context , AsyncSnapshot snapshot) {
     return AppBar(
       foregroundColor: Colors.white,
       backgroundColor: Colors.white,
@@ -90,9 +103,35 @@ class _VocasScreenState extends State<VocasScreen> {
           InkWell(
             // onTap:
             onTap: () {
-              map = Question.generateQustion(vocas);
-              _questionController.setQuestions(map);
-              Get.toNamed(QUIZ_PATH, arguments: {'day': day, 'step': step});
+              List<dynamic> knownsList = snapshot.data as List<dynamic>;
+              if(knownsList.isNotEmpty ) {
+                Get.dialog(
+                  AlertDialog(
+                    // title: const Text(''),
+                    content:  Text('${vocas.length - knownsList.length} 가 남아 있습니다. 이어 보시겠습니까 ?'),
+                    actions: [
+                      TextButton(onPressed: () {
+                          for (var e in knownsList) {
+                            vocas.removeAt(e);
+                         }
+                        _questionController.map = Question.generateQustion(vocas);
+                        _questionController.setQuestions();
+                         Get.toNamed(QUIZ_PATH, arguments: {'day': day, 'step': step});
+                      }, child: const Text('진행')),
+                       TextButton(onPressed: () {
+                        _questionController.removeScore('$day-$step');
+                        _questionController.map = Question.generateQustion(vocas);
+                        _questionController.setQuestions();
+                         Get.toNamed(QUIZ_PATH, arguments: {'day': day, 'step': step});
+                       }, child: const Text('취소'))
+                    ],
+                  )
+                );
+              }
+              else {
+
+              }
+              
             },
 
             child: Padding(

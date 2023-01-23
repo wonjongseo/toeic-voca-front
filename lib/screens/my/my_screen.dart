@@ -18,7 +18,7 @@ class MyScreen extends StatefulWidget {
 }
 
 class _MyScreenState extends State<MyScreen> {
-  List<Map<int, List<Voca>>> map = List.empty(growable: true);
+  // List<Map<int, List<Voca>>> map = List.empty(growable: true);
   int day = 1;
   final QuestionController _questionController = Get.put(QuestionController());
   bool isEnglish = false;
@@ -97,8 +97,9 @@ class _MyScreenState extends State<MyScreen> {
         if (vocas.length > 3)
           InkWell(
             onTap: () {
-              map = Question.generateQustion(vocas);
-              _questionController.setQuestions(map);
+              // map = Question.generateQustion(vocas);
+              _questionController.map =Question.generateQustion(vocas);
+              _questionController.setQuestions();
               Get.toNamed(QUIZ_PATH, arguments: {'day': day});
             },
             child: Padding(

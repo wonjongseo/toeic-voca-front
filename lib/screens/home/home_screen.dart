@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/models/voca.dart';
-import 'package:jongseo_toeic/mvvm/model/score_repository.dart';
+import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/home/components/day_card.dart';
 import 'package:jongseo_toeic/screens/my/my_screen.dart';
 

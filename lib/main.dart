@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/voca.dart';
-import 'package:jongseo_toeic/mvvm/hive/score.dart';
 import 'package:jongseo_toeic/screens/my/my_screen.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/home/home_screen.dart';
@@ -12,8 +14,11 @@ import 'package:jongseo_toeic/screens/voca/voca_step_screen.dart';
 import 'package:jongseo_toeic/screens/voca/vocas_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (GetPlatform.isMobile) {
     await Hive.initFlutter();
+  }else if(GetPlatform.isDesktop) {
+     Hive.init("C:/Users/kissco/Desktop/learning/jongseo_toeic/assets/hive");
   }
   Hive.registerAdapter(VocaAdapter());
   Hive.registerAdapter(ScoreAdapter());

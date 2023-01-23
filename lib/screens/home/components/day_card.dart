@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
-import 'package:jongseo_toeic/constants/score_controller.dart';
 import 'package:jongseo_toeic/models/voca.dart';
-import 'package:jongseo_toeic/mvvm/controller/day_of_score_contoller.dart';
-import 'package:jongseo_toeic/mvvm/model/score_repository.dart';
+import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/voca/voca_step_screen.dart';
 
 class DayCard extends StatelessWidget {
@@ -15,6 +13,7 @@ class DayCard extends StatelessWidget {
 
   final int day;
   Color getColor(double range) {
+    
     if (range > 0 && range < 0.1) {
       return Colors.redAccent;
     } else if (range < 0.35) {
@@ -88,7 +87,7 @@ class DayCard extends StatelessWidget {
                       children: [
                         Text(' ${score} / $vocaCount'),
                         const SizedBox(height: 20),
-                        Center(child: Text('${((0.1 * day) * 100).ceil()} %'))
+                        Center(child: Text('${(progressValue * 100).ceil()} %'))
                       ],
                     ),
                   ],

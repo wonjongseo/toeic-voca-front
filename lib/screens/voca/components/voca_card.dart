@@ -78,14 +78,7 @@ class _VocaCardState extends State<VocaCard> {
                           ),
                         ),
                         onTap: () async {
-                          // await widget.vocaProvider.insert(
-                          //     Voca(voca: widget.voca.voca, mean: widget.voca.mean));
-
-                          // List<Voca> list = await widget.vocaProvider.getVocas();
-
-                          // list.forEach((element) {
-                          //   print(element);
-                          // });
+                        
                         }),
               ],
             ),

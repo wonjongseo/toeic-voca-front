@@ -11,7 +11,10 @@ class Score {
   int step;
   @HiveField(2)
   int score;
+  @HiveField(3)
+  late int totalCnt;
 
+  // Score({required this.day, required this.step, required this.score, required this.totalCnt});
   Score({required this.day, required this.step, required this.score});
 
   String getKey() {
@@ -20,6 +23,7 @@ class Score {
 
   @override
   String toString() {
+    // return 'Score{day: $day,step: $step, score: $score, totalCnt :$totalCnt}';
     return 'Score{day: $day,step: $step, score: $score}';
   }
 }
