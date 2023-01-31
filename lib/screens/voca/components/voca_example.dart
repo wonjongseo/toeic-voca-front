@@ -6,7 +6,9 @@ import 'package:jongseo_toeic/repository/word_api_datasource.dart';
 
 const  String EXAMPLE_PATH = '/example';
 class ExampleScreen extends StatefulWidget {
-  const ExampleScreen({super.key});
+  const ExampleScreen({super.key, required this.word});
+  
+  final String word;
 
   @override
   State<ExampleScreen> createState() => _ExampleScreenState();
@@ -17,7 +19,6 @@ class _ExampleScreenState extends State<ExampleScreen> {
   
   String examples = '';
   String examplesMean = '';
-  var args = Get.arguments;
   late WordApiDatasource wordApiDatasource;
 
   @override
@@ -27,19 +28,13 @@ class _ExampleScreenState extends State<ExampleScreen> {
     wordApiDatasource =  WordApiDatasource();
  }
 
-
   @override
   Widget build(BuildContext context) {
    
-    print(args);
-    String voca ='';
-    if(args['voca'] != null){
-       voca = args['voca'];
-    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(voca),
+        title: Text(widget.word),
       ),
       body: Center(
         child: Padding(
@@ -47,9 +42,9 @@ class _ExampleScreenState extends State<ExampleScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(voca),
+              Text(widget.word),
               ElevatedButton(onPressed: () async {
-                 String tmp = await  wordApiDatasource.getWordExample(voca);
+                 String tmp = await  wordApiDatasource.getWordExample(widget.word);
                  setState(() {
                    examples = tmp;
                  });

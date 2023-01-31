@@ -75,9 +75,36 @@ class WordApiDatasource {
       print(response.data['examples']);
       examples = response.data['examples'];
     }
-    
-    print(examples);
 
-    return examples[0] ?? '';
+
+    return examples.length > 0 ? examples[0] :  '';
+  } 
+
+  Future<String> getWordDefinition(String word) async {
+    
+    String url = '${wordBaseUrl}/${word}/definitions';
+    String key = dotenv.get('X-RAPIDAPI-KEY');
+    String host = dotenv.get('X-RAPIDAPI-HOST');
+  
+
+    Map<String,dynamic> headers ={ 
+       'X-RapidAPI-Key':  key,
+        'X-RapidAPI-Host' : host
+    };
+ 
+    final response = await networkManager.request(RequestMethod.get, url, headers: headers);
+    
+    
+    print(response.data);
+    String example = '';
+    if(response.data['definitions'] != null) {
+       if(response.data['definitions']['definition'] != null )
+      print(response.data['definitions']['definition']);
+      example =response.data['definitions']['definition'];
+    }
+
+
+    return example;
   } 
 }
+// https://www.wordsapi.com/

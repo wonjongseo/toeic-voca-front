@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jongseo_toeic/common/dialog.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
+import 'package:jongseo_toeic/repository/word_api_datasource.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_example.dart';
 // import 'package:sqflite/sqflite.dart';
 
@@ -31,17 +33,22 @@ class _VocaCardState extends State<VocaCard> {
 
   bool isClick = false;
   double _height = 100;
+  late WordApiDatasource wordApiDatasource;
+
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    wordApiDatasource =  WordApiDatasource();
+ }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: InkWell(
-        onTap: () {
-          Get.toNamed(EXAMPLE_PATH, arguments:  {
-            'voca' : widget.voca.voca
-          });
-        },
+        onTap: showExample,
         child: AnimatedContainer(
           curve: Curves.fastOutSlowIn,
           duration: const Duration(microseconds: 0),
@@ -152,4 +159,62 @@ class _VocaCardState extends State<VocaCard> {
       ),
     );
   }
+
+  void showExample() async {
+
+          String word = widget.voca.voca;
+          String example = await  wordApiDatasource.getWordExample(word);
+  
+          List<String> exampleList = example.split(' ');
+          int exampleIndex = exampleList.indexOf(word);
+          if(exampleIndex == -1) {
+            exampleIndex = exampleList.indexOf('${word}s');
+            if(exampleIndex == -1) {
+              exampleIndex = exampleList.indexOf('${word}ed');
+              if(exampleIndex == -1) {
+                exampleIndex = exampleList.indexOf('${word}d');
+              }
+            }
+          }
+          String mean ='';
+           Get.dialog(
+            StatefulBuilder(
+              builder: (context,setState) {
+                return AlertDialog(
+                  title: Text('예제'),
+                  content:   Container(
+                    height: mean == '' ? 60 :80 ,
+                    child: example != '' ? SingleChildScrollView(
+                      child: Column(
+                      children: [
+                        RichText(text: TextSpan(
+                          children: List.generate(exampleList.length , (index) => index == exampleIndex ? TextSpan(text: '${exampleList[index]} ', style: const TextStyle(color: Colors.redAccent)) : TextSpan(text: '${exampleList[index]} ') 
+                        ))),
+                        SizedBox(height: 20),
+                        Text(mean, style: TextStyle(fontSize: 12),),
+                      ],
+                     ),
+                    ): Text('준비된 예제가 없습니다.')),
+  
+                  actions: [
+                    if(example != '' && mean == '')
+                    TextButton(
+                      onPressed: () async {
+                           String tmp =  await wordApiDatasource.getWordMean(example);
+                       setState(()  {
+                            mean = tmp;
+                       });
+                    }, child: const Text('뜻')
+                    )else
+                    TextButton(
+                      onPressed: () async {
+                       Get.back();
+                    }, child: const Text('Back')
+                    )
+                  ],
+                );
+              }
+            )
+          );
+      }
 }

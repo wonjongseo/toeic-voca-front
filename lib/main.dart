@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: MY_PATH, page: () => const MyScreen()),
         GetPage(name: VOCA_STEP_PATH, page: () => const VocaStepScreen()),
         GetPage(name: VOCAS_PATH, page: () => const VocasScreen()),
-        GetPage(name: EXAMPLE_PATH, page: () =>  const ExampleScreen()),
         GetPage(name: QUIZ_PATH, page: () => QuizScreen()),
         GetPage(name: SCORE_PATH, page: () => const ScoreScreen()),
       ],
