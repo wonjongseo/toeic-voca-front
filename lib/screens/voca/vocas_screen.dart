@@ -3,7 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
 import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/score/score.dart';
+<<<<<<< HEAD
 import 'package:jongseo_toeic/models/voca/voca.dart';
+=======
+import 'package:jongseo_toeic/models/voca.dart';
+>>>>>>> b3cbd8f1915788e7ae80447a360c194fc6e9224b
 import 'package:jongseo_toeic/repository/known_voca_repositry.dart';
 import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
@@ -24,7 +28,11 @@ class _VocasScreenState extends State<VocasScreen> {
   late int step;
   late List<Voca> vocas;
   final QuestionController _questionController = Get.put(QuestionController());
+<<<<<<< HEAD
   KnownVocaRepositry knownVocaRepositry = KnownVocaRepositry();
+=======
+   KnownVocaRepositry knownVocaRepositry = KnownVocaRepositry();
+>>>>>>> b3cbd8f1915788e7ae80447a360c194fc6e9224b
   @override
   void initState() {
     super.initState();
@@ -104,7 +112,11 @@ class _VocasScreenState extends State<VocasScreen> {
             // onTap:
             onTap: () {
               List<dynamic> knownsList = snapshot.data as List<dynamic>;
+<<<<<<< HEAD
               if(knownsList.isNotEmpty) {
+=======
+              if(knownsList.isNotEmpty ) {
+>>>>>>> b3cbd8f1915788e7ae80447a360c194fc6e9224b
                 Get.dialog(
                   AlertDialog(
                     // title: const Text(''),
@@ -129,9 +141,13 @@ class _VocasScreenState extends State<VocasScreen> {
                 );
               }
               else {
+<<<<<<< HEAD
                   _questionController.map = Question.generateQustion(vocas);
                   _questionController.setQuestions();
                   Get.toNamed(QUIZ_PATH, arguments: {'day': day, 'step': step});
+=======
+
+>>>>>>> b3cbd8f1915788e7ae80447a360c194fc6e9224b
               }
               
             },
