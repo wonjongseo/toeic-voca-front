@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
-import 'package:jongseo_toeic/models/voca.dart';
+import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/mvvm/model/voca_repository.dart';
 
 class VocaListController extends GetxController {
   late VocaRepository _vocaRepository;
+
+  late Map<String, List<Voca>> items;
 
   late List<Voca> _vocas;
   List<Voca> get vocas => _vocas;
@@ -14,6 +16,7 @@ class VocaListController extends GetxController {
   }
 
   Future<void> _loadVocas() async {
+    items = Voca.listToMap();
     _vocas = await _vocaRepository.getItem();
     update();
   }

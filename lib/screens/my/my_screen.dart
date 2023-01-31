@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
 import 'package:jongseo_toeic/models/Question.dart';
-import 'package:jongseo_toeic/models/voca.dart';
+import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/screens/my/components/my_input_editer.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
@@ -18,7 +18,7 @@ class MyScreen extends StatefulWidget {
 }
 
 class _MyScreenState extends State<MyScreen> {
-  List<Map<int, List<Voca>>> map = List.empty(growable: true);
+  // List<Map<int, List<Voca>>> map = List.empty(growable: true);
   int day = 1;
   final QuestionController _questionController = Get.put(QuestionController());
   bool isEnglish = false;
@@ -97,8 +97,9 @@ class _MyScreenState extends State<MyScreen> {
         if (vocas.length > 3)
           InkWell(
             onTap: () {
-              map = Question.generateQustion(vocas);
-              _questionController.setQuestions(map);
+              // map = Question.generateQustion(vocas);
+              _questionController.map =Question.generateQustion(vocas);
+              _questionController.setQuestions();
               Get.toNamed(QUIZ_PATH, arguments: {'day': day});
             },
             child: Padding(

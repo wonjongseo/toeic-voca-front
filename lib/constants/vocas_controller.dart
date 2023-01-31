@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jongseo_toeic/models/voca.dart';
+import 'package:jongseo_toeic/models/voca/voca.dart';
 
 class VocasController extends GetxController {
 

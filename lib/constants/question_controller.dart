@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jongseo_toeic/models/voca.dart';
+import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/Question.dart';
-import 'package:jongseo_toeic/mvvm/controller/day_of_score_contoller.dart';
-import 'package:jongseo_toeic/mvvm/hive/score.dart';
-import 'package:jongseo_toeic/mvvm/model/score_repository.dart';
+import 'package:jongseo_toeic/models/voca/voca.dart';
+import 'package:jongseo_toeic/mvvm/model/voca_repository.dart';
+import 'package:jongseo_toeic/repository/known_voca_repositry.dart';
+import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/score/score_screen.dart';
 
 class QuestionController extends GetxController
     with SingleGetTickerProviderMixin {
   late AnimationController _animationController;
   late Animation _animation;
-  late ScoreRepositry _scoreRepositry;
   late PageController _pageController;
+  List<Map<int, List<Voca>>> map = List.empty(growable: true);  
+  late ScoreRepositry _scoreRepositry;
+  late KnownVocaRepositry _knownVocaRepositry;
+  
 
   bool _isWrong = false;
   List<Question> questions = [];
@@ -58,6 +62,7 @@ class QuestionController extends GetxController
 
   @override
   void onInit() {
+    _knownVocaRepositry = KnownVocaRepositry();
     _scoreRepositry = ScoreRepositry();
     _animationController =
         AnimationController(duration: Duration(seconds: 60), vsync: this);
@@ -79,7 +84,7 @@ class QuestionController extends GetxController
     super.onClose();
   }
 
-  void setQuestions(List<Map<int, List<Voca>>> map) {
+  void setQuestions() {
     for (var vocas in map) {
       for (var e in vocas.entries) {
         List<Voca> optionsVoca = e.value;
@@ -94,8 +99,7 @@ class QuestionController extends GetxController
   }
 
   void updateCount() async {
-    Score score = Score(day: day, step: step, score: _numOfCorrectAns);
-    await _scoreRepositry.insert(score);
+    await _scoreRepositry.insert(day, step , _numOfCorrectAns);
   }
 
   void checkAns(Question question, int selectedIndex) {
@@ -106,6 +110,7 @@ class QuestionController extends GetxController
     _animationController.stop();
     update();
     if (_correctAns == _selectedAns) {
+      _knownVocaRepositry.insertKnownVoca('$day-$step', _questionNumber.toInt());
       _text = 'skip';
       _numOfCorrectAns++;
       Future.delayed(const Duration(milliseconds: 400), () {
@@ -140,12 +145,20 @@ class QuestionController extends GetxController
       if (questions.length == numOfCorrectAns) {
         _isEnd = true;
       }
+      if(_numOfCorrectAns == questions.length) {
+        List<String> keys = List.generate(questions.length, (index) => index.toString());
+        _knownVocaRepositry.deleteKnownVoca(keys);
+      }
       Get.to(const ScoreScreen(), arguments: {'day': day});
     }
   }
+  
+  void removeScore(String key) {
+    _scoreRepositry.remove(key);
+  }
 
   void skipQuestion() {
-    _numOfCorrectAns++;
+    _numOfCorrectAns = 9;
     _isAnswered = true;
     _animationController.stop();
     if (!wrongQuestions.contains(questions[_questionNumber.value - 1])) {

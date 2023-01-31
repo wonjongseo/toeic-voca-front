@@ -13,10 +13,14 @@ class Voca {
   late String id;
   @HiveField(4)
   bool isCorrect = false;
+  @HiveField(5)
+  bool isLike = false;
 
   bool isMine = false;
+  
+  static int MAX_VOCA_CNT  = 10;
   static late List<List<Voca>> daysObj;
-  static late List<List<int>> scores;
+ 
 
   Voca({required this.id, required this.voca, required this.mean});
 
@@ -25,9 +29,34 @@ class Voca {
     isMine = true;
   }
 
+  static  Map<String, List<Voca>>  listToMap() {
+    Map<String, List<Voca>> vocaOfStep = {};
+    for(int day = 1 ; day <= 30 ; day++) {
+      
+      List<Voca> dayOfVocaList = daysObj[day];
+      int dayOfVocaListCnt = dayOfVocaList.length;
+     
+      int stepCount = (dayOfVocaListCnt / 10).floor();
+      bool isOver = dayOfVocaListCnt % 10 != 0;
+      int step = 1;
+      for( ; step <= stepCount ; step++) {
+        String key = '$day-$step';
+        List<Voca> sublistedVocaList =List.empty();
+        if(step == stepCount ) {
+            sublistedVocaList = dayOfVocaList.sublist((step * 10));
+        } else {
+          sublistedVocaList = dayOfVocaList.sublist((step * 10), (step * 10 + 10));
+        }
+        if(sublistedVocaList.isNotEmpty) {
+          vocaOfStep[key] = sublistedVocaList;
+        }
+      }
+    }
+
+    return vocaOfStep;
+  }
   static jsonToObject() {
     daysObj = List.empty(growable: true);
-    scores = List.empty(growable: true);
     for (var day in days) {
       List<Voca> dayObj = day.map((e) => Voca.fromMap(e)).toList();
       daysObj.add(dayObj);
@@ -1753,5 +1782,8 @@ class Voca {
 
   static getCountOfDay(int day) {
     return daysObj[day].length;
+  }
+  static getStepOfDay(int day) {
+     return  (getCountOfDay(day) / MAX_VOCA_CNT ).ceil();
   }
 }

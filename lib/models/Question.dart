@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:jongseo_toeic/models/voca.dart';
+import 'package:jongseo_toeic/models/voca/voca.dart';
+
 
 class Question {
   final int answer;
@@ -16,7 +17,7 @@ class Question {
   }
 
   static Map<int, List<Voca>> generateAnswer(
-      List<Voca> vocas, int currentIndex) {
+    List<Voca> vocas, int currentIndex) {
     Random random = Random();
 
     List<int> answerIndex = List.empty(growable: true);
