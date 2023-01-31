@@ -1,7 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jongseo_toeic/constants/hive_constants.dart';
 import 'package:jongseo_toeic/models/score/score.dart';
-<<<<<<< HEAD
 import 'package:jongseo_toeic/models/voca/voca.dart';
 
 class ScoreRepositry {
@@ -9,19 +8,6 @@ class ScoreRepositry {
   Future<void> insert(int day , int step , int correctNumber) async {
     String key = '$day-$step';
     Box<Score> scoreBox = await Hive.openBox<Score>(scoreHive);
-=======
-
-class ScoreRepositry {
-
-//  Future<void> insert(Score score) async {
-//    
-   
-//     scoreBox.put(score.getKey(), score);
-//   }
-  Future<void> insert(int day , int step , int correctNumber) async {
-    String key = '$day-$step';
-     Box<Score> scoreBox = await Hive.openBox<Score>(scoreHive);
->>>>>>> b3cbd8f1915788e7ae80447a360c194fc6e9224b
 
     Score? score = scoreBox.get(key);
     if(score == null) {
@@ -30,13 +16,8 @@ class ScoreRepositry {
     else {
       int newScore = score.score + correctNumber;
       score.score =newScore;
-<<<<<<< HEAD
     }
     scoreBox.put(key, score);
-=======
-      scoreBox.put(key, score);
-    }
->>>>>>> b3cbd8f1915788e7ae80447a360c194fc6e9224b
   }
 
   Future<int> update(String key , int succeessCnt) async {
@@ -75,7 +56,6 @@ class ScoreRepositry {
     Box<Score> scoreBox = await Hive.openBox<Score>(scoreHive);
     scoreBox.delete(key);
   }
-<<<<<<< HEAD
 
   Future<List<List<Score>>> hiveToList() async {
     int day = Voca.getDayCount();
@@ -95,6 +75,4 @@ class ScoreRepositry {
     return scores;
     
   }
-=======
->>>>>>> b3cbd8f1915788e7ae80447a360c194fc6e9224b
 }
