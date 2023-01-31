@@ -163,49 +163,62 @@ class _VocaCardState extends State<VocaCard> {
   void showExample() async {
 
           String word = widget.voca.voca;
-          String example = await  wordApiDatasource.getWordExample(word);
-  
-          List<String> exampleList = example.split(' ');
-          int exampleIndex = exampleList.indexOf(word);
-          if(exampleIndex == -1) {
-            exampleIndex = exampleList.indexOf('${word}s');
-            if(exampleIndex == -1) {
-              exampleIndex = exampleList.indexOf('${word}ed');
-              if(exampleIndex == -1) {
-                exampleIndex = exampleList.indexOf('${word}d');
-              }
-            }
-          }
+          List<dynamic> examples = await  wordApiDatasource.getWordExample(word);
+
+        
           String mean ='';
            Get.dialog(
             StatefulBuilder(
               builder: (context,setState) {
                 return AlertDialog(
                   title: Text('예제'),
-                  content:   Container(
-                    height: mean == '' ? 60 :80 ,
-                    child: example != '' ? SingleChildScrollView(
-                      child: Column(
-                      children: [
-                        RichText(text: TextSpan(
-                          children: List.generate(exampleList.length , (index) => index == exampleIndex ? TextSpan(text: '${exampleList[index]} ', style: const TextStyle(color: Colors.redAccent)) : TextSpan(text: '${exampleList[index]} ') 
-                        ))),
-                        SizedBox(height: 20),
-                        Text(mean, style: TextStyle(fontSize: 12),),
-                      ],
-                     ),
-                    ): Text('준비된 예제가 없습니다.')),
+                  content:   SingleChildScrollView(
+                    child: Column(
+                      children : List.generate(examples.length, (index) {
+                        String example = examples[index];
+                          List<String> exampleList = example.split(' ');
+                            int exampleIndex = exampleList.indexOf(word);
+                            if(exampleIndex == -1) {
+                              exampleIndex = exampleList.indexOf('${word}s');
+                              if(exampleIndex == -1) {
+                                exampleIndex = exampleList.indexOf('${word}ed');
+                                if(exampleIndex == -1) {
+                                  exampleIndex = exampleList.indexOf('${word}d');
+                                }
+                              }
+                            }
+                        return  Container(
+                          height: mean == '' ? 60 :80 ,
+                          child: example != '' ? SingleChildScrollView(
+                            child: Column(
+                            children: [
+                              TextButton(onPressed:() {
+                                
+                              }, child: RichText(text: TextSpan(
+                                children: List.generate(exampleList.length , (index) => index == exampleIndex ? TextSpan(text: '${exampleList[index]} ', style: const TextStyle(color: Colors.redAccent)) : TextSpan(text: '${exampleList[index]} ') 
+                              )))),
+                              
+                              SizedBox(height: 20),
+                              Text(mean, style: TextStyle(fontSize: 12),),
+                            ],
+                           ),
+                          ): Text('준비된 예제가 없습니다.'));
+               
+                      })
+                      
+                    ),
+                  ),
   
                   actions: [
-                    if(example != '' && mean == '')
-                    TextButton(
-                      onPressed: () async {
-                           String tmp =  await wordApiDatasource.getWordMean(example);
-                       setState(()  {
-                            mean = tmp;
-                       });
-                    }, child: const Text('뜻')
-                    )else
+                    // if(example != '' && mean == '')
+                    // TextButton(
+                    //   onPressed: () async {
+                    //        String tmp =  await wordApiDatasource.getWordMean(example);
+                    //    setState(()  {
+                    //         mean = tmp;
+                    //    });
+                    // }, child: const Text('뜻')
+                    // )else
                     TextButton(
                       onPressed: () async {
                        Get.back();

@@ -54,7 +54,7 @@ class WordApiDatasource {
       return e.toString();
     }
   }
-  Future<String> getWordExample(String word) async {
+  Future<List<dynamic>> getWordExample(String word) async {
     
     String url = '${wordBaseUrl}/${word}/examples';
     String key = dotenv.get('X-RAPIDAPI-KEY');
@@ -69,7 +69,6 @@ class WordApiDatasource {
     final response = await networkManager.request(RequestMethod.get, url, headers: headers);
     
     
-    print(response.data);
     List<dynamic> examples = [];
     if(response.data['examples'] != null) {
       print(response.data['examples']);
@@ -77,7 +76,7 @@ class WordApiDatasource {
     }
 
 
-    return examples.length > 0 ? examples[0] :  '';
+    return examples.length > 0 ? examples :  [];
   } 
 
   Future<String> getWordDefinition(String word) async {
