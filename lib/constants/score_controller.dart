@@ -2,12 +2,12 @@ import 'package:get/get.dart';
 import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/repository/score_repository.dart';
 
-class ScoreController extends GetxController {
-  late ScoreRepositry scoreRepositry;
+class ScoreController2 extends GetxController {
+  late ScoreRepositry2 scoreRepositry;
   late List<List<Score>> scores ;
 
   ScoreController() {
-    scoreRepositry = ScoreRepositry();
+    scoreRepositry = ScoreRepositry2();
     init();
   }
   

@@ -20,19 +20,25 @@ class VocaAdapter extends TypeAdapter<Voca> {
       id: fields[3] as String,
       voca: fields[0] as String,
       mean: fields[2] as String,
-    );
+    )
+      ..isCorrect = fields[4] as bool
+      ..isLike = fields[5] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Voca obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.voca)
       ..writeByte(2)
       ..write(obj.mean)
       ..writeByte(3)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(4)
+      ..write(obj.isCorrect)
+      ..writeByte(5)
+      ..write(obj.isLike);
   }
 
   @override

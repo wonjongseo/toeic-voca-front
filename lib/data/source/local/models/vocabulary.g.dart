@@ -1,40 +1,44 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'score.dart';
+part of 'vocabulary.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ScoreAdapter extends TypeAdapter<Score> {
+class VocabularyAdapter extends TypeAdapter<Vocabulary> {
   @override
-  final int typeId = 2;
+  final int typeId = 10;
 
   @override
-  Score read(BinaryReader reader) {
+  Vocabulary read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Score(
-      day: fields[0] as int,
-      step: fields[1] as int,
-      score: fields[2] as int,
-    )..totalCnt = fields[3] as int;
+    return Vocabulary(
+      word: fields[0] as String,
+      mean: fields[1] as String,
+      id: fields[2] as int,
+      isLike: fields[3] as dynamic,
+      isKnown: fields[4] as dynamic,
+    );
   }
 
   @override
-  void write(BinaryWriter writer, Score obj) {
+  void write(BinaryWriter writer, Vocabulary obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.day)
+      ..write(obj.word)
       ..writeByte(1)
-      ..write(obj.step)
+      ..write(obj.mean)
       ..writeByte(2)
-      ..write(obj.score)
+      ..write(obj.id)
       ..writeByte(3)
-      ..write(obj.totalCnt);
+      ..write(obj.isLike)
+      ..writeByte(4)
+      ..write(obj.isKnown);
   }
 
   @override
@@ -43,7 +47,7 @@ class ScoreAdapter extends TypeAdapter<Score> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScoreAdapter &&
+      other is VocabularyAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

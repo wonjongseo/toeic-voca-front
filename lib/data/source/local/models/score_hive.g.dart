@@ -1,40 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'score.dart';
+part of 'score_hive.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ScoreAdapter extends TypeAdapter<Score> {
+class ScoreHiveAdapter extends TypeAdapter<ScoreHive> {
   @override
-  final int typeId = 2;
+  final int typeId = 11;
 
   @override
-  Score read(BinaryReader reader) {
+  ScoreHive read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Score(
-      day: fields[0] as int,
-      step: fields[1] as int,
-      score: fields[2] as int,
-    )..totalCnt = fields[3] as int;
+    return ScoreHive(
+      fields[2] as int,
+      fields[3] as int,
+      fields[0] as int,
+      fields[1] as int,
+    );
   }
 
   @override
-  void write(BinaryWriter writer, Score obj) {
+  void write(BinaryWriter writer, ScoreHive obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.day)
+      ..write(obj.totalCount)
       ..writeByte(1)
-      ..write(obj.step)
+      ..write(obj.currectCount)
       ..writeByte(2)
-      ..write(obj.score)
+      ..write(obj.day)
       ..writeByte(3)
-      ..write(obj.totalCnt);
+      ..write(obj.step);
   }
 
   @override
@@ -43,7 +44,7 @@ class ScoreAdapter extends TypeAdapter<Score> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScoreAdapter &&
+      other is ScoreHiveAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

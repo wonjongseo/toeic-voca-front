@@ -38,7 +38,6 @@ class _VocaCardState extends State<VocaCard> {
 
 @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     wordApiDatasource =  WordApiDatasource();
  }
@@ -47,114 +46,109 @@ class _VocaCardState extends State<VocaCard> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: InkWell(
-        onTap: showExample,
-        child: AnimatedContainer(
-          curve: Curves.fastOutSlowIn,
-          duration: const Duration(microseconds: 0),
-          height: _height,
-          decoration: cBoxDecoration,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      // tts.speak(widget.voca.voca);
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 4, left: 4),
-                      child: Icon(
-                        Icons.mic,
-                        size: 23,
-                      ),
+      child: AnimatedContainer(
+        curve: Curves.fastOutSlowIn,
+        duration: const Duration(microseconds: 0),
+        height: _height,
+        decoration: cBoxDecoration,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    // tts.speak(widget.voca.voca);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 4, left: 4),
+                    child: Icon(
+                      Icons.mic,
+                      size: 23,
                     ),
                   ),
-                  widget.voca.isMine
-                      ? InkWell(
-                          onTap: widget.onPress!,
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 4, right: 8.0),
-                            child: Icon(
-                              Icons.remove,
-                              size: 28,
-                            ),
-                          ),
-                        )
-                      : InkWell(
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 4, right: 8.0),
-                            child: Icon(
-                              Icons.star,
-                              size: 26,
-                            ),
-                          ),
-                          onTap: () async {
-                          
-                          }),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(
-                    child: Text(
-                      widget.voca.voca,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 21,
-                          overflow: TextOverflow.clip),
-                    ),
-                  ),
-                  if (isClick)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Center(
-                        child: Text(widget.voca.mean),
-                      ),
-                    )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  isClick
-                      ? InkWell(
-                          onTap: () {
-                            setState(() {
-                              _height = 100;
-                              isClick = false;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 4, right: 8.0),
-                            child: Icon(
-                              Icons.keyboard_arrow_up,
-                              size: 28,
-                            ),
-                          ),
-                        )
-                      : InkWell(
-                          onTap: () {
-                            setState(() {
-                              _height = 150;
-                              isClick = true;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 4, right: 8.0),
-                            child: Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 28,
-                            ),
+                ),
+                widget.voca.isMine
+                    ? InkWell(
+                        onTap: widget.onPress!,
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 4, right: 8.0),
+                          child: Icon(
+                            Icons.remove,
+                            size: 28,
                           ),
                         ),
-                ],
-              ),
-            ],
-          ),
+                      )
+                    : InkWell(
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 4, right: 8.0),
+                          child: Icon(
+                            Icons.star,
+                            size: 26,
+                          ),
+                        ),
+                         onTap: showExample),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Center(
+                  child: Text(
+                    widget.voca.voca,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 21,
+                        overflow: TextOverflow.clip),
+                  ),
+                ),
+                if (isClick)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Center(
+                      child: Text(widget.voca.mean),
+                    ),
+                  )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                isClick
+                    ? InkWell(
+                        onTap: () {
+                          setState(() {
+                            _height = 100;
+                            isClick = false;
+                          });
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 4, right: 8.0),
+                          child: Icon(
+                            Icons.keyboard_arrow_up,
+                            size: 28,
+                          ),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          setState(() {
+                            _height = 150;
+                            isClick = true;
+                          });
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 4, right: 8.0),
+                          child: Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -165,60 +159,64 @@ class _VocaCardState extends State<VocaCard> {
           String word = widget.voca.voca;
           List<dynamic> examples = await  wordApiDatasource.getWordExample(word);
 
-        
-          String mean ='';
+          List<String> means = List.filled(examples.length, '');
            Get.dialog(
             StatefulBuilder(
               builder: (context,setState) {
                 return AlertDialog(
-                  title: Text('예제'),
+                  title:  Text('예제', style: Theme.of(context).textTheme.bodySmall,),
                   content:   SingleChildScrollView(
-                    child: Column(
-                      children : List.generate(examples.length, (index) {
-                        String example = examples[index];
-                          List<String> exampleList = example.split(' ');
-                            int exampleIndex = exampleList.indexOf(word);
-                            if(exampleIndex == -1) {
-                              exampleIndex = exampleList.indexOf('${word}s');
+                    child:  examples.isNotEmpty  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children :
+                       List.generate(examples.length, (index) {
+                            String example = examples[index];
+                            List<String> exampleList = example.split(' ');
+                              int exampleIndex = exampleList.indexOf(word);
                               if(exampleIndex == -1) {
-                                exampleIndex = exampleList.indexOf('${word}ed');
+                                exampleIndex = exampleList.indexOf('${word}s');
                                 if(exampleIndex == -1) {
-                                  exampleIndex = exampleList.indexOf('${word}d');
+                                  exampleIndex = exampleList.indexOf('${word}ed');
+                                  if(exampleIndex == -1) {
+                                    exampleIndex = exampleList.indexOf('${word}d');
                                 }
                               }
                             }
-                        return  Container(
-                          height: mean == '' ? 60 :80 ,
-                          child: example != '' ? SingleChildScrollView(
-                            child: Column(
-                            children: [
-                              TextButton(onPressed:() {
-                                
-                              }, child: RichText(text: TextSpan(
+                        return  SizedBox(
+                          height: 60 + (examples.length  * 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero
+                              ),
+                              onPressed:()  async{
+                               String tmp =  await wordApiDatasource.getWordMean(example);
+                                setState(()  {
+                                   means[index] = tmp;
+                               });
+                            }, child: Expanded(
+                              child: RichText(
+                                text: TextSpan(
                                 children: List.generate(exampleList.length , (index) => index == exampleIndex ? TextSpan(text: '${exampleList[index]} ', style: const TextStyle(color: Colors.redAccent)) : TextSpan(text: '${exampleList[index]} ') 
-                              )))),
-                              
-                              SizedBox(height: 20),
-                              Text(mean, style: TextStyle(fontSize: 12),),
-                            ],
-                           ),
-                          ): Text('준비된 예제가 없습니다.'));
+                              ))),
+                            )),
+                            
+                            const SizedBox(height: 5),
+                            Text(means[index], style: Theme.of(context).textTheme.bodySmall,),
+
+                            Divider(),
+                            const SizedBox(height: 8),
+
+                          ],
+                           ));
                
                       })
-                      
-                    ),
+                    ): Text('준비된 예제가 없습니다.'),
                   ),
   
                   actions: [
-                    // if(example != '' && mean == '')
-                    // TextButton(
-                    //   onPressed: () async {
-                    //        String tmp =  await wordApiDatasource.getWordMean(example);
-                    //    setState(()  {
-                    //         mean = tmp;
-                    //    });
-                    // }, child: const Text('뜻')
-                    // )else
                     TextButton(
                       onPressed: () async {
                        Get.back();

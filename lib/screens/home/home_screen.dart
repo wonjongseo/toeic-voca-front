@@ -1,63 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jongseo_toeic/constants/score_controller.dart';
+
+import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/screens/home/components/day_card.dart';
-import 'package:jongseo_toeic/screens/my/my_screen.dart';
+import 'package:jongseo_toeic/screens/home/components/my_drawer.dart';
 
 const String HOME_PATH = '/';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+   HomeScreen({super.key});
  
+  VocabularyController _vocabularyController = Get.put(VocabularyController());
   @override
   Widget build(BuildContext context) {
     int daysCount = Voca.getDayCount();
-    
-    ScoreController scoreController = Get.find<ScoreController>();
+        return Scaffold(
+          drawer: const  MyDrawer(),
+            appBar: _appBar(context),
+            body: _body(daysCount));
+  }
 
-    return Scaffold(
-        appBar: AppBar(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            title: const Text(
-              'Jongseo Voca',
-              style: TextStyle(color: Colors.black),
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
+  Widget _body(int daysCount) {
+    
+    return GetBuilder<VocabularyController>(
+      builder: (controller) {
+        return ListView(
+                    children: List.generate(
+                      controller.countOfDays,
+                      (index) {
+                        if (index == 0) {
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 20),
+                          );
+                        } else {
+                          return DayCard(day: index);
+                        }
+                      },
+                    ),
+              );
+      }
+    );
+  }
+
+  AppBar _appBar(BuildContext context) {
+    return AppBar(
+              leading: Builder(
+                builder: (context) => IconButton(onPressed: (){
+                  Scaffold.of(context).openDrawer();
+                }, icon: const Icon(Icons.menu, color: Colors.black,)),
+              ),
+              // elevation: 0,
+              title:  Text('Jongseo Voca', style: Theme.of(context).textTheme.bodySmall,),
+              actions: [
+                Padding(padding: const EdgeInsets.only(right: 20),
                 child: IconButton(
                   onPressed: () {
-                    Get.toNamed(MY_PATH);
+                    Get.changeTheme(Get.isDarkMode? ThemeData.light(): ThemeData.dark());
                   },
-                  icon: const Icon(
-                    Icons.person,
-                    size: 33,
-                    color: Colors.black,
-                  ),
-                ),
-              )
-            ]),
-        body: GetBuilder<ScoreController>(
-          
-          builder: (context) {
-            return ListView(
-              children: List.generate(
-                daysCount,
-                (index) {
-                  if (index == 0) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                    );
-                  } else {
-                    return DayCard(day: index);
-                  }
-                },
-              ),
-            );
-          }
-        ));
+                  icon: Icon(Icons.settings,
+                  color: Colors.black,),
+                ),)
+              ]);
   }
 }

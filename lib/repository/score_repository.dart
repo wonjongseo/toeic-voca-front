@@ -3,7 +3,7 @@ import 'package:jongseo_toeic/constants/hive_constants.dart';
 import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
 
-class ScoreRepositry {
+class ScoreRepositry2 {
   
   Future<void> insert(int day , int step , int correctNumber) async {
     String key = '$day-$step';

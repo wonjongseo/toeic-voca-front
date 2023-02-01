@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
-import 'package:jongseo_toeic/mvvm/model/voca_repository.dart';
 import 'package:jongseo_toeic/repository/known_voca_repositry.dart';
 import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/score/score_screen.dart';
@@ -14,7 +13,6 @@ class QuestionController extends GetxController
   late Animation _animation;
   late PageController _pageController;
   List<Map<int, List<Voca>>> map = List.empty(growable: true);  
-  late ScoreRepositry _scoreRepositry;
   late KnownVocaRepositry _knownVocaRepositry;
   
 
@@ -63,7 +61,6 @@ class QuestionController extends GetxController
   @override
   void onInit() {
     _knownVocaRepositry = KnownVocaRepositry();
-    _scoreRepositry = ScoreRepositry();
     _animationController =
         AnimationController(duration: Duration(seconds: 60), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
@@ -80,7 +77,6 @@ class QuestionController extends GetxController
   void onClose() {
     _animationController.dispose();
     _pageController.dispose();
-    updateCount();
     super.onClose();
   }
 
@@ -98,9 +94,7 @@ class QuestionController extends GetxController
     }
   }
 
-  void updateCount() async {
-    await _scoreRepositry.insert(day, step , _numOfCorrectAns);
-  }
+ 
 
   void checkAns(Question question, int selectedIndex) {
     _isAnswered = true;
@@ -153,9 +147,7 @@ class QuestionController extends GetxController
     }
   }
   
-  void removeScore(String key) {
-    _scoreRepositry.remove(key);
-  }
+  
 
   void skipQuestion() {
     _numOfCorrectAns = 9;

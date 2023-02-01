@@ -119,7 +119,6 @@ class _VocasScreenState extends State<VocasScreen> {
                          Get.toNamed(QUIZ_PATH, arguments: {'day': day, 'step': step});
                       }, child: const Text('진행')),
                        TextButton(onPressed: () {
-                        _questionController.removeScore('$day-$step');
                         _questionController.map = Question.generateQustion(vocas);
                         _questionController.setQuestions();
                          Get.toNamed(QUIZ_PATH, arguments: {'day': day, 'step': step});

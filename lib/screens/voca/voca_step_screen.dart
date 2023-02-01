@@ -16,10 +16,17 @@ class VocaStepScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments;
-    final List<Voca> vocas = args['vocas'];
-    final int day = args['day'];
+     List<Voca> vocas  = [];
+    if(args['vocas'] != null) {
+        vocas = args['vocas'];
+    }
+     int day = 0;
+    if(args['vocas'] != null) {
+        day  = args['day'];
+    }
+    
+   
     // final ScoreRepositry scoreRepositry = ScoreRepositry();
-    ScoreController scoreController;
 
     int gridCount = vocas.length % 10 == 0
         ? (vocas.length / 10).floor()
@@ -29,7 +36,7 @@ class VocaStepScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Day $day',
-          style: const TextStyle(color: Colors.black),
+            style:Theme.of(context).textTheme.bodyLarge
         ),
         foregroundColor: Colors.white,
         backgroundColor: Colors.white,
@@ -52,17 +59,12 @@ class VocaStepScreen extends StatelessWidget {
         children: List.generate(
           gridCount,
           (step) {
-            return GetBuilder<ScoreController>(
-                
-                builder: (scoreController) {
-                  int score = scoreController.getScoreOfStep(day, step);
                   return StepCard(
                       day: day,
                       gridCount: gridCount,
                       vocas: vocas,
                       step: step,
-                      score: score);
-                });
+                      score: 2);
           },
         ),
       ),
@@ -111,10 +113,7 @@ class StepCard extends StatelessWidget {
           child: Center(
               child: Text(
             (step + 1).toString(),
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
+            style:Theme.of(context).textTheme.displayMedium
           )),
         ),
       ),
