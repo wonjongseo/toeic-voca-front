@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:jongseo_toeic/constants/constatns.dart';
+import 'package:jongseo_toeic/config/constatns.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
 
 class ProgressBar extends StatelessWidget {

@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: Themings.lightTheme,
-      darkTheme: Themings.darkTheme,
+      theme: Get.isDarkMode ? Themings.darkTheme : Themings.lightTheme,
+      // darkTheme: Themings.darkTheme,
       title: 'Jongseo Toeic',
       initialRoute: HOME_PATH,
       getPages: [

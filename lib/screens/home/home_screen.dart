@@ -23,7 +23,6 @@ class HomeScreen extends StatelessWidget {
 
   Widget _body(int daysCount) {
     return GetBuilder<VocabularyController>(builder: (controller) {
-      print(controller.countOfDays);
       return ListView(
         children: List.generate(
           controller.countOfDays,

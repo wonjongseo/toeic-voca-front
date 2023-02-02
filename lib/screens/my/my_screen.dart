@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
+import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
 import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
 import 'package:jongseo_toeic/models/Question.dart';
-import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/screens/my/components/my_input_editer.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
@@ -19,11 +19,12 @@ class MyScreen extends StatefulWidget {
 }
 
 class _MyScreenState extends State<MyScreen> {
-  // List<Map<int, List<Voca>>> map = List.empty(growable: true);
   int day = 1;
   final QuestionController _questionController = Get.put(QuestionController());
+  VocabularyController vocabularyController = Get.put(VocabularyController());
   bool isEnglish = false;
-  List<Vocabulary> vocas = List.empty(growable: true);
+
+  late List<Vocabulary> vocas;
 
   late TextEditingController _vocaTextEditingController;
   late TextEditingController _meanTextEditingController;
@@ -31,7 +32,8 @@ class _MyScreenState extends State<MyScreen> {
   @override
   void initState() {
     super.initState();
-    vocas.add(Vocabulary.mine(id: 1, word: 'voca', mean: 'mean'));
+    vocas = vocabularyController.myVocabularies;
+
     _vocaTextEditingController = TextEditingController();
     _meanTextEditingController = TextEditingController();
   }
@@ -44,12 +46,12 @@ class _MyScreenState extends State<MyScreen> {
   }
 
   void createMyVoca() {
-    String voca = _vocaTextEditingController.value.text;
+    String word = _vocaTextEditingController.value.text;
     String mean = _meanTextEditingController.value.text;
-    if (voca == '' || mean == '') return;
-    Vocabulary newVoca = Vocabulary.mine(
-        word: voca, mean: mean, id: DateTime.now().microsecond);
-    vocas.add(newVoca);
+    if (word == '' || mean == '') return;
+
+    vocabularyController.addMyVocabulary(word, mean);
+
     _vocaTextEditingController.clear();
     _meanTextEditingController.clear();
   }
@@ -67,7 +69,8 @@ class _MyScreenState extends State<MyScreen> {
             voca: vocas[index],
             onPress: () {
               setState(() {
-                vocas.removeAt(index);
+                //   vocas.removeAt(index);
+                vocabularyController.deleteMyVocabulary(vocas[index]);
               });
             },
           );
@@ -99,7 +102,7 @@ class _MyScreenState extends State<MyScreen> {
           InkWell(
             onTap: () {
               // map = Question.generateQustion(vocas);
-              _questionController.map =Question.generateQustion(vocas);
+              _questionController.map = Question.generateQustion(vocas);
               _questionController.setQuestions();
               Get.toNamed(QUIZ_PATH, arguments: {'day': day});
             },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
+import 'package:jongseo_toeic/screens/home/home_screen.dart';
 import 'package:jongseo_toeic/screens/quiz/components/body.dart';
 
 import 'package:get/get.dart';
@@ -15,9 +16,9 @@ class QuizScreen extends StatelessWidget {
     Map args = Get.arguments;
     QuestionController _questionController = Get.put(QuestionController());
     int day = args['day'];
-       
+
     _questionController.day = day;
-    if(args.containsKey('step')) {
+    if (args.containsKey('step')) {
       int step = args['step'];
       _questionController.step = step;
     }
@@ -33,10 +34,14 @@ class QuizScreen extends StatelessWidget {
               color: Colors.black,
             ),
             onPressed: () {
-              Get.offAllNamed(VOCA_STEP_PATH, arguments: {
-                'day': day,
-                'vocas': Voca.getDay(day),
-              });
+              if (day == -1) {
+                Get.offAllNamed(HOME_PATH);
+              } else {
+                Get.offAllNamed(VOCA_STEP_PATH, arguments: {
+                  'day': day,
+                  'vocas': Voca.getDay(day),
+                });
+              }
             },
           ),
           iconTheme: IconThemeData(color: Colors.black),

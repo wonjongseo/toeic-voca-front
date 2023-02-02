@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jongseo_toeic/constants/constatns.dart';
-import 'package:jongseo_toeic/constants/score_controller.dart';
+import 'package:jongseo_toeic/config/constatns.dart';
 import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
 import 'package:jongseo_toeic/data/source/local/models/score_hive.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
+import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
 import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
 import 'package:jongseo_toeic/models/Question.dart';
-import 'package:jongseo_toeic/models/score/score.dart';
-import 'package:jongseo_toeic/models/voca/voca.dart';
-import 'package:jongseo_toeic/repository/known_voca_repositry.dart';
-import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_card.dart';
 import 'package:get/get.dart';
@@ -21,20 +18,20 @@ class VocasScreen extends StatefulWidget {
 }
 
 class _VocasScreenState extends State<VocasScreen> {
-  late int day;
   late int step;
   late List<Vocabulary> vocas;
   final QuestionController _questionController = Get.put(QuestionController());
-  KnownVocaRepositry knownVocaRepositry = KnownVocaRepositry();
+  VocabularyController _vocabularyControlleray =
+      Get.find<VocabularyController>();
+  int day = 0;
   @override
   void initState() {
     super.initState();
     final args = Get.arguments;
-    vocas = args['vocas'];
-    day = args['day'];
     step = args['step'];
-    _questionController.day = day;
     _questionController.step = step;
+    day = _vocabularyControlleray.day;
+    vocas = _vocabularyControlleray.getVocabularyOfStep(step);
   }
 
   Vocabulary flipMean(bool isEnglish, int index) {
@@ -50,26 +47,18 @@ class _VocasScreenState extends State<VocasScreen> {
           mean: vocas[index].word,
           id: vocas[index].id);
     }
-
     return voca;
   }
 
   bool isEnglish = true;
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: knownVocaRepositry.selectKnwonVocas('$day-$step'),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return SafeArea(child: Text(snapshot.error.toString()));
-          }
-          return _body(context, snapshot);
-        });
+    return _body(context);
   }
 
-  Scaffold _body(BuildContext context, AsyncSnapshot snapshot) {
+  Scaffold _body(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(context, snapshot),
+      appBar: _appBar(context),
       body: ListView(
         children: List.generate(
           vocas.length,
@@ -81,7 +70,7 @@ class _VocasScreenState extends State<VocasScreen> {
     );
   }
 
-  AppBar _appBar(BuildContext context, AsyncSnapshot snapshot) {
+  AppBar _appBar(BuildContext context) {
     return AppBar(
       foregroundColor: Colors.white,
       backgroundColor: Colors.white,
@@ -104,7 +93,7 @@ class _VocasScreenState extends State<VocasScreen> {
           InkWell(
             // onTap:
             onTap: () {
-              List<dynamic> knownsList = snapshot.data as List<dynamic>;
+              List<dynamic> knownsList = [];
               if (knownsList.isNotEmpty) {
                 Get.dialog(AlertDialog(
                   // title: const Text(''),

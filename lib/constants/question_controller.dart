@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
+import 'package:jongseo_toeic/data/source/local/local_datasource.dart';
 import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
-import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
-import 'package:jongseo_toeic/repository/known_voca_repositry.dart';
-import 'package:jongseo_toeic/repository/score_repository.dart';
 import 'package:jongseo_toeic/screens/score/score_screen.dart';
 
 class QuestionController extends GetxController
@@ -13,9 +12,9 @@ class QuestionController extends GetxController
   late AnimationController _animationController;
   late Animation _animation;
   late PageController _pageController;
-  List<Map<int, List<Vocabulary>>> map = List.empty(growable: true);  
-  late KnownVocaRepositry _knownVocaRepositry;
-  
+  List<Map<int, List<Vocabulary>>> map = List.empty(growable: true);
+
+  late VocabularyController vocabularyController;
 
   bool _isWrong = false;
   List<Question> questions = [];
@@ -61,7 +60,8 @@ class QuestionController extends GetxController
 
   @override
   void onInit() {
-    _knownVocaRepositry = KnownVocaRepositry();
+    vocabularyController = VocabularyController();
+
     _animationController =
         AnimationController(duration: Duration(seconds: 60), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
@@ -95,17 +95,15 @@ class QuestionController extends GetxController
     }
   }
 
- 
-
   void checkAns(Question question, int selectedIndex) {
     _isAnswered = true;
-
     _correctAns = question.answer;
     _selectedAns = selectedIndex;
     _animationController.stop();
     update();
+
     if (_correctAns == _selectedAns) {
-      _knownVocaRepositry.insertKnownVoca('$day-$step', _questionNumber.toInt());
+      vocabularyController.updateScore(day, step);
       _text = 'skip';
       _numOfCorrectAns++;
       Future.delayed(const Duration(milliseconds: 400), () {
@@ -140,18 +138,17 @@ class QuestionController extends GetxController
       if (questions.length == numOfCorrectAns) {
         _isEnd = true;
       }
-      if(_numOfCorrectAns == questions.length) {
-        List<String> keys = List.generate(questions.length, (index) => index.toString());
-        _knownVocaRepositry.deleteKnownVoca(keys);
+      if (_numOfCorrectAns == questions.length) {
+        List<String> keys =
+            List.generate(questions.length, (index) => index.toString());
+        // _knownVocaRepositry.deleteKnownVoca(keys);
       }
+
       Get.to(const ScoreScreen(), arguments: {'day': day});
     }
   }
-  
-  
 
   void skipQuestion() {
-    _numOfCorrectAns = 9;
     _isAnswered = true;
     _animationController.stop();
     if (!wrongQuestions.contains(questions[_questionNumber.value - 1])) {

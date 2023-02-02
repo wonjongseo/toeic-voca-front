@@ -19,16 +19,16 @@ class VocabularyAdapter extends TypeAdapter<Vocabulary> {
     return Vocabulary(
       word: fields[0] as String,
       mean: fields[1] as String,
-      id: fields[2] as int,
+      id: fields[2] as String,
       isLike: fields[3] as dynamic,
       isKnown: fields[4] as dynamic,
-    );
+    )..isMine = fields[5] as bool;
   }
 
   @override
   void write(BinaryWriter writer, Vocabulary obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.word)
       ..writeByte(1)
@@ -38,7 +38,9 @@ class VocabularyAdapter extends TypeAdapter<Vocabulary> {
       ..writeByte(3)
       ..write(obj.isLike)
       ..writeByte(4)
-      ..write(obj.isKnown);
+      ..write(obj.isKnown)
+      ..writeByte(5)
+      ..write(obj.isMine);
   }
 
   @override

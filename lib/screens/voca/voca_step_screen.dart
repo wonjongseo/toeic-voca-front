@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:jongseo_toeic/constants/constatns.dart';
-import 'package:jongseo_toeic/constants/score_controller.dart';
+import 'package:jongseo_toeic/config/constatns.dart';
+import 'package:jongseo_toeic/constants/question_controller.dart';
 import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
 import 'package:jongseo_toeic/data/source/local/models/score_hive.dart';
 import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
-import 'package:jongseo_toeic/models/score/score.dart';
-import 'package:jongseo_toeic/models/voca/voca.dart';
-import 'package:jongseo_toeic/repository/score_repository.dart';
+import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/screens/home/home_screen.dart';
+import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:jongseo_toeic/screens/voca/vocas_screen.dart';
 
 const VOCA_STEP_PATH = '/voca-section';
@@ -19,8 +19,8 @@ class VocaStepScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     VocabularyController vocabularyController = Get.put(VocabularyController());
+    QuestionController _questionController = Get.put(QuestionController());
     var arguments = Get.arguments;
-    print(arguments['day']);
     if (arguments != null && arguments['day'] != null) {
       vocabularyController.day = arguments['day'];
     }
@@ -43,11 +43,28 @@ class VocaStepScreen extends StatelessWidget {
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
-          onPressed: () {
-            Get.offNamed(HOME_PATH);
-            // Get.offAllNamed(HOME_PATH , bin);
-          },
+          onPressed: getTo,
         ),
+        actions: [
+          InkWell(
+            // onTap:
+            onTap: () {
+              _questionController.map = Question.generateQustion(vocabularies);
+              _questionController.setQuestions();
+              Get.toNamed(QUIZ_PATH, arguments: {'day': -1, 'step': -1});
+            },
+
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/svg/book.svg',
+                  height: 30,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: GridView.count(
         padding: const EdgeInsets.all(20.0),
@@ -67,6 +84,10 @@ class VocaStepScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void getTo() {
+    Get.offNamed(HOME_PATH);
   }
 }
 
@@ -89,16 +110,9 @@ class StepCard extends StatelessWidget {
         Get.find<VocabularyController>();
     return InkWell(
       onTap: () {
-        vocabularyController.updateScore(day, step);
-
-        // Get.toNamed(VOCAS_PATH, arguments: {
-        //   'day': day,
-        //   'step': step,
-        //   'vocas': step + 1 != gridCount
-        //       ? vocabularies.sublist((step * 10), (step * 10 + 10))
-        //       : vocabularies.sublist((step * 10),
-        //           (step * 10 + (vocabularies.length - (gridCount - 1) * 10)))
-        // });
+        Get.toNamed(VOCAS_PATH, arguments: {
+          'step': step,
+        });
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

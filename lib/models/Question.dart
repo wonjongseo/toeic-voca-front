@@ -1,8 +1,6 @@
 import 'dart:math';
 
 import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
-import 'package:jongseo_toeic/models/voca/voca.dart';
-
 
 class Question {
   final int answer;
@@ -18,7 +16,7 @@ class Question {
   }
 
   static Map<int, List<Vocabulary>> generateAnswer(
-    List<Vocabulary> vocas, int currentIndex) {
+      List<Vocabulary> vocas, int currentIndex) {
     Random random = Random();
 
     List<int> answerIndex = List.empty(growable: true);
@@ -53,7 +51,8 @@ class Question {
     return {correctIndex: answerVoca};
   }
 
-  static List<Map<int, List<Vocabulary>>> generateQustion(List<Vocabulary> vocas) {
+  static List<Map<int, List<Vocabulary>>> generateQustion(
+      List<Vocabulary> vocas) {
     List<Map<int, List<Vocabulary>>> map = List.empty(growable: true);
 
     for (int correntIndex = 0; correntIndex < vocas.length; correntIndex++) {

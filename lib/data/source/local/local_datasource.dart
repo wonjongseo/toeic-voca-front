@@ -19,6 +19,7 @@ class LocalDataSource {
     Voca.listToMap();
 
     await Hive.openBox<List<Vocabulary>>(Vocabulary.boxKey);
+    await Hive.openBox<Vocabulary>(Vocabulary.myBoxKey);
     await Hive.openBox<List<ScoreHive>>(ScoreHive.boxKey);
   }
 
@@ -45,9 +46,8 @@ class LocalDataSource {
   }
 
   List<List<Vocabulary>> getAllvocabularies() {
-    print('1');
     final vocabularyBox = Hive.box<List<Vocabulary>>(Vocabulary.boxKey);
-    print('2');
+
     final vocabularies = List.generate(
             vocabularyBox.length, (index) => vocabularyBox.getAt(index))
         .whereType<List<Vocabulary>>()
@@ -104,7 +104,49 @@ class LocalDataSource {
     return [];
   }
 
+  List<Vocabulary> getMyVocabulary() {
+    final vocabularyBox = Hive.box<Vocabulary>(Vocabulary.myBoxKey);
+
+    final myVocas = List.generate(
+            vocabularyBox.length, (index) => vocabularyBox.getAt(index))
+        .whereType<Vocabulary>()
+        .toList();
+
+    return myVocas;
+  }
+
+  Future<Vocabulary> addVocabulary(Vocabulary vocabulary) async {
+    final myVocabularyBox = Hive.box<Vocabulary>(Vocabulary.myBoxKey);
+    print(vocabulary);
+    await myVocabularyBox.put(vocabulary.id, vocabulary);
+
+    return vocabulary;
+  }
+
+  Future<void> updateVocabulary(int day, Vocabulary vocabulary) async {
+    final vocabularyBox = Hive.box<List<Vocabulary>>(Vocabulary.boxKey);
+    List<Vocabulary> vocas = vocabularyBox.getAt(1) as List<Vocabulary>;
+    print(vocas);
+    for (int index = 0; index < vocas.length; index++) {
+      if (vocabulary.word == vocas[index].word &&
+          vocabulary.mean == vocas[index].mean) {
+        print('index: $index');
+
+        vocas[index] = vocabulary;
+        break;
+      }
+    }
+
+    await vocabularyBox.put(day, vocas);
+  }
+
   List<Vocabulary> getVocabularyOfStep(int day, int step) {
     return [];
+  }
+
+  Future<void> removeVocabulary(Vocabulary vocabulary) async {
+    print(vocabulary);
+    final myVocabularyBox = Hive.box<Vocabulary>(Vocabulary.myBoxKey);
+    await myVocabularyBox.delete(vocabulary.id);
   }
 }

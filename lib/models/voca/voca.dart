@@ -17,10 +17,9 @@ class Voca {
   bool isLike = false;
 
   bool isMine = false;
-  
-  static int MAX_VOCA_CNT  = 10;
+
+  static int MAX_VOCA_CNT = 10;
   static late List<List<Voca>> daysObj;
- 
 
   Voca({required this.id, required this.voca, required this.mean});
 
@@ -29,25 +28,25 @@ class Voca {
     isMine = true;
   }
 
-  static  Map<String, List<Voca>>  listToMap() {
+  static Map<String, List<Voca>> listToMap() {
     Map<String, List<Voca>> vocaOfStep = {};
-    for(int day = 1 ; day <= 30 ; day++) {
-      
+    for (int day = 1; day <= 30; day++) {
       List<Voca> dayOfVocaList = daysObj[day];
       int dayOfVocaListCnt = dayOfVocaList.length;
-     
+
       int stepCount = (dayOfVocaListCnt / 10).floor();
       bool isOver = dayOfVocaListCnt % 10 != 0;
       int step = 1;
-      for( ; step <= stepCount ; step++) {
+      for (; step <= stepCount; step++) {
         String key = '$day-$step';
-        List<Voca> sublistedVocaList =List.empty();
-        if(step == stepCount ) {
-            sublistedVocaList = dayOfVocaList.sublist((step * 10));
+        List<Voca> sublistedVocaList = List.empty();
+        if (step == stepCount) {
+          sublistedVocaList = dayOfVocaList.sublist((step * 10));
         } else {
-          sublistedVocaList = dayOfVocaList.sublist((step * 10), (step * 10 + 10));
+          sublistedVocaList =
+              dayOfVocaList.sublist((step * 10), (step * 10 + 10));
         }
-        if(sublistedVocaList.isNotEmpty) {
+        if (sublistedVocaList.isNotEmpty) {
           vocaOfStep[key] = sublistedVocaList;
         }
       }
@@ -55,6 +54,7 @@ class Voca {
 
     return vocaOfStep;
   }
+
   static jsonToObject() {
     daysObj = List.empty(growable: true);
     for (var day in days) {
@@ -1783,7 +1783,8 @@ class Voca {
   static getCountOfDay(int day) {
     return daysObj[day].length;
   }
+
   static getStepOfDay(int day) {
-     return  (getCountOfDay(day) / MAX_VOCA_CNT ).ceil();
+    return (getCountOfDay(day) / MAX_VOCA_CNT).ceil();
   }
 }
