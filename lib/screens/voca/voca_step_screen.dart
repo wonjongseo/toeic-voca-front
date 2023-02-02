@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
 import 'package:jongseo_toeic/constants/score_controller.dart';
+import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
+import 'package:jongseo_toeic/data/source/local/models/score_hive.dart';
+import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
 import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/repository/score_repository.dart';
@@ -15,29 +18,23 @@ class VocaStepScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = Get.arguments;
-     List<Voca> vocas  = [];
-    if(args['vocas'] != null) {
-        vocas = args['vocas'];
+    VocabularyController vocabularyController = Get.put(VocabularyController());
+    var arguments = Get.arguments;
+    print(arguments['day']);
+    if (arguments != null && arguments['day'] != null) {
+      vocabularyController.day = arguments['day'];
     }
-     int day = 0;
-    if(args['vocas'] != null) {
-        day  = args['day'];
-    }
-    
-   
-    // final ScoreRepositry scoreRepositry = ScoreRepositry();
 
-    int gridCount = vocas.length % 10 == 0
-        ? (vocas.length / 10).floor()
-        : (vocas.length / 10).ceil();
+    List<Vocabulary> vocabularies = vocabularyController.getVocabularyOfDay();
+
+    int gridCount = vocabularies.length % 10 == 0
+        ? (vocabularies.length / 10).floor()
+        : (vocabularies.length / 10).ceil();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Day $day',
-            style:Theme.of(context).textTheme.bodyLarge
-        ),
+        title: Text('Day ${vocabularyController.day}',
+            style: Theme.of(context).textTheme.bodyLarge),
         foregroundColor: Colors.white,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -47,7 +44,8 @@ class VocaStepScreen extends StatelessWidget {
             color: Colors.black,
           ),
           onPressed: () {
-            Get.offAllNamed(HOME_PATH);
+            Get.offNamed(HOME_PATH);
+            // Get.offAllNamed(HOME_PATH , bin);
           },
         ),
       ),
@@ -59,12 +57,12 @@ class VocaStepScreen extends StatelessWidget {
         children: List.generate(
           gridCount,
           (step) {
-                  return StepCard(
-                      day: day,
-                      gridCount: gridCount,
-                      vocas: vocas,
-                      step: step,
-                      score: 2);
+            return StepCard(
+              day: vocabularyController.day,
+              gridCount: gridCount,
+              vocabularies: vocabularies,
+              step: step,
+            );
           },
         ),
       ),
@@ -77,45 +75,47 @@ class StepCard extends StatelessWidget {
     super.key,
     required this.day,
     required this.gridCount,
-    required this.vocas,
+    required this.vocabularies,
     required this.step,
-    required this.score,
   });
 
-  final int day, step, score;
+  final int day, step;
   final int gridCount;
-
-  final List<Voca> vocas;
+  final List<Vocabulary> vocabularies;
 
   @override
   Widget build(BuildContext context) {
+    VocabularyController vocabularyController =
+        Get.find<VocabularyController>();
     return InkWell(
       onTap: () {
-        Get.toNamed(VOCAS_PATH, arguments: {
-          'day': day,
-          'step': step,
-          'vocas': step + 1 != gridCount
-              ? vocas.sublist((step * 10), (step * 10 + 10))
-              : vocas.sublist((step * 10),
-                  (step * 10 + (vocas.length - (gridCount - 1) * 10)))
-        });
+        vocabularyController.updateScore(day, step);
+
+        // Get.toNamed(VOCAS_PATH, arguments: {
+        //   'day': day,
+        //   'step': step,
+        //   'vocas': step + 1 != gridCount
+        //       ? vocabularies.sublist((step * 10), (step * 10 + 10))
+        //       : vocabularies.sublist((step * 10),
+        //           (step * 10 + (vocabularies.length - (gridCount - 1) * 10)))
+        // });
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
         alignment: Alignment.center,
         decoration: cBoxDecoration,
-        child: GridTile(
-          footer: Center(
-            child: step + 1 != gridCount
-                ? Text('$score / 10')
-                : Text('$score / ${(vocas.length - (gridCount - 1) * 10)}'),
-          ),
-          child: Center(
-              child: Text(
-            (step + 1).toString(),
-            style:Theme.of(context).textTheme.displayMedium
-          )),
-        ),
+        child: GetBuilder<VocabularyController>(builder: (controller) {
+          ScoreHive scoreHive = controller.scoreOfStep(day, step);
+          return GridTile(
+            footer: Center(
+              child:
+                  Text('${scoreHive.currectCount} / ${scoreHive.totalCount}'),
+            ),
+            child: Center(
+                child: Text((step + 1).toString(),
+                    style: Theme.of(context).textTheme.displayMedium)),
+          );
+        }),
       ),
     );
   }

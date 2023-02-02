@@ -8,13 +8,12 @@ void main() async {
   await dotenv.load(fileName: ".env");
 
   await LocalDataSource.initialize();
-  
+
   LocalDataSource localDataSource = LocalDataSource();
-  await localDataSource.initVocabulary();
-  if(!localDataSource.hasData()) {
-    
+
+  if (!await localDataSource.hasData()) {
+    await localDataSource.initVocabulary();
   }
-  
+
   runApp(const MyApp());
 }
-

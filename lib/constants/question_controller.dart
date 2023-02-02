@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
 import 'package:jongseo_toeic/models/score/score.dart';
 import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
@@ -12,7 +13,7 @@ class QuestionController extends GetxController
   late AnimationController _animationController;
   late Animation _animation;
   late PageController _pageController;
-  List<Map<int, List<Voca>>> map = List.empty(growable: true);  
+  List<Map<int, List<Vocabulary>>> map = List.empty(growable: true);  
   late KnownVocaRepositry _knownVocaRepositry;
   
 
@@ -83,10 +84,10 @@ class QuestionController extends GetxController
   void setQuestions() {
     for (var vocas in map) {
       for (var e in vocas.entries) {
-        List<Voca> optionsVoca = e.value;
-        Voca questionVoca = optionsVoca[e.key];
+        List<Vocabulary> optionsVoca = e.value;
+        Vocabulary questionVoca = optionsVoca[e.key];
         Question question = Question(
-            question: questionVoca.voca,
+            question: questionVoca.word,
             answer: e.key,
             options: optionsVoca.map((e) => e.mean).toList());
         questions.add(question);

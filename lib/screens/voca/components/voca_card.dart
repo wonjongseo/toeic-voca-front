@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/common/dialog.dart';
 import 'package:jongseo_toeic/constants/constatns.dart';
+import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/repository/word_api_datasource.dart';
 import 'package:jongseo_toeic/screens/voca/components/voca_example.dart';
@@ -11,7 +12,7 @@ class VocaCard extends StatefulWidget {
   VocaCard({super.key, this.onPress, required this.voca});
 
   VoidCallback? onPress;
-  final Voca voca;
+  final Vocabulary voca;
 
   @override
   State<VocaCard> createState() => _VocaCardState();
@@ -96,7 +97,7 @@ class _VocaCardState extends State<VocaCard> {
               children: [
                 Center(
                   child: Text(
-                    widget.voca.voca,
+                    widget.voca.word,
                     style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 21,
@@ -156,7 +157,7 @@ class _VocaCardState extends State<VocaCard> {
 
   void showExample() async {
 
-          String word = widget.voca.voca;
+          String word = widget.voca.word;
           List<dynamic> examples = await  wordApiDatasource.getWordExample(word);
 
           List<String> means = List.filled(examples.length, '');

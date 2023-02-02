@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jongseo_toeic/constants/question_controller.dart';
+import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
 import 'package:jongseo_toeic/models/Question.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/screens/my/components/my_input_editer.dart';
@@ -22,7 +23,7 @@ class _MyScreenState extends State<MyScreen> {
   int day = 1;
   final QuestionController _questionController = Get.put(QuestionController());
   bool isEnglish = false;
-  List<Voca> vocas = List.empty(growable: true);
+  List<Vocabulary> vocas = List.empty(growable: true);
 
   late TextEditingController _vocaTextEditingController;
   late TextEditingController _meanTextEditingController;
@@ -30,7 +31,7 @@ class _MyScreenState extends State<MyScreen> {
   @override
   void initState() {
     super.initState();
-    vocas.add(Voca.mine(id: '1', voca: 'voca', mean: 'mean'));
+    vocas.add(Vocabulary.mine(id: 1, word: 'voca', mean: 'mean'));
     _vocaTextEditingController = TextEditingController();
     _meanTextEditingController = TextEditingController();
   }
@@ -46,8 +47,8 @@ class _MyScreenState extends State<MyScreen> {
     String voca = _vocaTextEditingController.value.text;
     String mean = _meanTextEditingController.value.text;
     if (voca == '' || mean == '') return;
-    Voca newVoca = Voca.mine(
-        voca: voca, mean: mean, id: DateTime.now().microsecond.toString());
+    Vocabulary newVoca = Vocabulary.mine(
+        word: voca, mean: mean, id: DateTime.now().microsecond);
     vocas.add(newVoca);
     _vocaTextEditingController.clear();
     _meanTextEditingController.clear();

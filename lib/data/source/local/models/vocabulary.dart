@@ -22,6 +22,8 @@ class Vocabulary extends HiveObject {
   @HiveField(4)
   late bool isKnown;
 
+  bool isMine =false;
+
   Vocabulary({required this.word, required this.mean, required this.id, isLike, isKnown}) ;
 
   Vocabulary.fromMap(Map<String, dynamic> map) {
@@ -32,6 +34,10 @@ class Vocabulary extends HiveObject {
     isKnown =  false;
   }
 
+  Vocabulary.mine({required this.id, required this.word, required this.mean}) {
+    Vocabulary(id: id, word: word, mean: mean);
+    isMine = true;
+  }
   @override
   String toString() {
     return 'Vocabulary{id: $id,word: $word, mean: $mean isLike: $isLike, isKnown: $isKnown}';

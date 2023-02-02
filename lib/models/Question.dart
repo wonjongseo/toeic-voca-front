@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
 
 
@@ -16,8 +17,8 @@ class Question {
     return 'Question{answer: $answer,question: $question, options: $options}';
   }
 
-  static Map<int, List<Voca>> generateAnswer(
-    List<Voca> vocas, int currentIndex) {
+  static Map<int, List<Vocabulary>> generateAnswer(
+    List<Vocabulary> vocas, int currentIndex) {
     Random random = Random();
 
     List<int> answerIndex = List.empty(growable: true);
@@ -37,26 +38,26 @@ class Question {
       correctIndex = randomNumber;
     }
 
-    List<Voca> answerVoca = List.empty(growable: true);
+    List<Vocabulary> answerVoca = List.empty(growable: true);
 
     for (int j = 0; j < answerIndex.length; j++) {
       Map<String, String> temp = {
         "id": vocas[answerIndex[j]].id.toString(),
-        'voca': vocas[answerIndex[j]].voca,
+        'voca': vocas[answerIndex[j]].word,
         'mean': vocas[answerIndex[j]].mean,
       };
-      Voca voca = Voca.fromMap(temp);
+      Vocabulary voca = Vocabulary.fromMap(temp);
       answerVoca.add(voca);
     }
 
     return {correctIndex: answerVoca};
   }
 
-  static List<Map<int, List<Voca>>> generateQustion(List<Voca> vocas) {
-    List<Map<int, List<Voca>>> map = List.empty(growable: true);
+  static List<Map<int, List<Vocabulary>>> generateQustion(List<Vocabulary> vocas) {
+    List<Map<int, List<Vocabulary>>> map = List.empty(growable: true);
 
     for (int correntIndex = 0; correntIndex < vocas.length; correntIndex++) {
-      Map<int, List<Voca>> voca = generateAnswer(vocas, correntIndex);
+      Map<int, List<Vocabulary>> voca = generateAnswer(vocas, correntIndex);
       map.add(voca);
     }
     map.shuffle();
