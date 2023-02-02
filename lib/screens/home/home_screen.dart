@@ -11,11 +11,10 @@ const String HOME_PATH = '/';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final VocabularyController vocabularyController =
-      Get.put(VocabularyController());
   @override
   Widget build(BuildContext context) {
     int daysCount = Voca.getDayCount();
+    VocabularyController vocabularyController = Get.put(VocabularyController());
     return Scaffold(
         drawer: const MyDrawer(),
         appBar: _appBar(context),
@@ -24,6 +23,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _body(int daysCount) {
     return GetBuilder<VocabularyController>(builder: (controller) {
+      print(controller.countOfDays);
       return ListView(
         children: List.generate(
           controller.countOfDays,

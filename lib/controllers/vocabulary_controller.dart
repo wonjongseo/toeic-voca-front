@@ -17,10 +17,9 @@ class VocabularyController extends GetxController {
     init();
   }
 
-  init() async {
-    vocabularies =
-        await _localDataSource.getAllvocabularies() as List<List<Vocabulary>>;
-    scores = await _localDataSource.getAllScoreHive();
+  init() {
+    vocabularies = _localDataSource.getAllvocabularies();
+    scores = _localDataSource.getAllScoreHive();
   }
 
   void updateScore(int day, int step) {

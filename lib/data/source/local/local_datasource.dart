@@ -44,18 +44,19 @@ class LocalDataSource {
     return vocabularyBox.length > 0 && scoreHiveBox.length > 0;
   }
 
-  Future<List<dynamic>> getAllvocabularies() async {
+  List<List<Vocabulary>> getAllvocabularies() {
     print('1');
     final vocabularyBox = Hive.box<List<Vocabulary>>(Vocabulary.boxKey);
     print('2');
     final vocabularies = List.generate(
-        vocabularyBox.length, (index) => vocabularyBox.getAt(index)).toList();
+            vocabularyBox.length, (index) => vocabularyBox.getAt(index))
+        .whereType<List<Vocabulary>>()
+        .toList();
 
-    print(vocabularies);
     return vocabularies;
   }
 
-  Future<List<List<ScoreHive>>> getAllScoreHive() async {
+  List<List<ScoreHive>> getAllScoreHive() {
     final scoreHiveBox = Hive.box<List<ScoreHive>>(ScoreHive.boxKey);
     List<List<ScoreHive>> scoreHiveList =
         List.generate(scoreHiveBox.length, (index) => scoreHiveBox.getAt(index))

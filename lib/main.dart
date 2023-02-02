@@ -11,9 +11,10 @@ void main() async {
 
   LocalDataSource localDataSource = LocalDataSource();
 
-  if (!await localDataSource.hasData()) {
-    await localDataSource.initVocabulary();
-  }
+  // if (!await localDataSource.hasData()) {
+  //   await localDataSource.initVocabulary();
+  // }
+  await localDataSource.initVocabulary();
 
   runApp(const MyApp());
 }
