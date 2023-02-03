@@ -81,7 +81,7 @@ class VocabularyController extends GetxController {
     }
   }
 
-  Vocabulary getVoca() {
+  Vocabulary getVoca(String id) {
     Vocabulary vocabulary = vocabularies[day][step];
 
     print('vocabulary : ${vocabulary}');
@@ -102,8 +102,8 @@ class VocabularyController extends GetxController {
     return vocabulary;
   }
 
-  void addLikeVocabulary(Vocabulary vocabulary) {
-    toogleLike(vocabulary);
+  void addLikeVocabulary(String id, Vocabulary vocabulary) {
+    toogleLike(id);
 
     Vocabulary newVoca = Vocabulary.mine(
         word: vocabulary.word,
@@ -111,18 +111,36 @@ class VocabularyController extends GetxController {
         id: DateTime.now().microsecondsSinceEpoch.toString());
 
     myVocabularies.add(newVoca);
+    vocabularies[day][step].isLike = !vocabularies[day][step].isLike;
 
     _localDataSource.updateVocabulary(day, vocabulary);
     _localDataSource.addVocabulary(newVoca);
   }
 
-  void toogleLike(Vocabulary vocabulary) {
-    Vocabulary vocabulary = vocabularies[day][step];
-    vocabulary.isLike = !vocabulary.isLike;
+  void toogleLike(String id) {
+    // Vocabulary vocabulary = vocabularies[day][step];
 
-    vocabularies[day][step] = vocabulary;
+    List<Vocabulary> temp = vocabularies[day];
+
+    for (Vocabulary vocabulary in temp) {
+      if (vocabulary.id == id) {
+        print('-------------------------');
+
+        print('vocabulary: ${vocabulary}');
+        vocabulary.isLike = !vocabulary.isLike;
+        break;
+      }
+    }
+
+    print(vocabularies[day]);
+
+    print('-------------------------');
 
     update();
+  }
+
+  Vocabulary isReal() {
+    return vocabularies[day][step];
   }
 
   void deleteMyVocabulary(Vocabulary vocabulary) {

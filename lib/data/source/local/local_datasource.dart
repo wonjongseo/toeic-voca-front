@@ -117,7 +117,6 @@ class LocalDataSource {
 
   Future<Vocabulary> addVocabulary(Vocabulary vocabulary) async {
     final myVocabularyBox = Hive.box<Vocabulary>(Vocabulary.myBoxKey);
-    print(vocabulary);
     await myVocabularyBox.put(vocabulary.id, vocabulary);
 
     return vocabulary;
@@ -125,13 +124,11 @@ class LocalDataSource {
 
   Future<void> updateVocabulary(int day, Vocabulary vocabulary) async {
     final vocabularyBox = Hive.box<List<Vocabulary>>(Vocabulary.boxKey);
-    List<Vocabulary> vocas = vocabularyBox.getAt(1) as List<Vocabulary>;
-    print(vocas);
+    List<Vocabulary> vocas = vocabularyBox.getAt(day) as List<Vocabulary>;
     for (int index = 0; index < vocas.length; index++) {
       if (vocabulary.word == vocas[index].word &&
           vocabulary.mean == vocas[index].mean) {
-        print('index: $index');
-
+        vocabulary.isLike = !vocabulary.isLike;
         vocas[index] = vocabulary;
         break;
       }

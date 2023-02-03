@@ -30,25 +30,26 @@ class _VocasScreenState extends State<VocasScreen> {
     final args = Get.arguments;
     step = args['step'];
     _questionController.step = step;
+    _vocabularyControlleray.step = step;
     day = _vocabularyControlleray.day;
     vocas = _vocabularyControlleray.getVocabularyOfStep(step);
   }
 
-  Vocabulary flipMean(bool isEnglish, int index) {
-    Vocabulary voca;
-    if (isEnglish) {
-      voca = Vocabulary(
-          word: vocas[index].word,
-          mean: vocas[index].mean,
-          id: vocas[index].id);
-    } else {
-      voca = Vocabulary(
-          word: vocas[index].mean,
-          mean: vocas[index].word,
-          id: vocas[index].id);
-    }
-    return voca;
-  }
+  // Vocabulary flipMean(bool isEnglish, int index) {
+  //   Vocabulary voca;
+  //   if (isEnglish) {
+  //     voca = Vocabulary(
+  //         word: vocas[index].word,
+  //         mean: vocas[index].mean,
+  //         id: vocas[index].id);
+  //   } else {
+  //     voca = Vocabulary(
+  //         word: vocas[index].mean,
+  //         mean: vocas[index].word,
+  //         id: vocas[index].id);
+  //   }
+  //   return voca;
+  // }
 
   bool isEnglish = true;
   @override
@@ -63,7 +64,7 @@ class _VocasScreenState extends State<VocasScreen> {
         children: List.generate(
           vocas.length,
           (index) {
-            return VocaCard(voca: flipMean(isEnglish, index));
+            return VocaCard(voca: vocas[index]);
           },
         ),
       ),
