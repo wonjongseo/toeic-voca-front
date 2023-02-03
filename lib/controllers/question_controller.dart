@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
-import 'package:jongseo_toeic/data/source/local/local_datasource.dart';
 import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
 import 'package:jongseo_toeic/models/Question.dart';
-import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/screens/score/score_screen.dart';
 
 class QuestionController extends GetxController
@@ -103,7 +101,9 @@ class QuestionController extends GetxController
     update();
 
     if (_correctAns == _selectedAns) {
-      vocabularyController.updateScore(day, step);
+      if (!(day == -1 || step == -1)) {
+        vocabularyController.updateScore(day, step);
+      }
       _text = 'skip';
       _numOfCorrectAns++;
       Future.delayed(const Duration(milliseconds: 400), () {
@@ -135,9 +135,10 @@ class QuestionController extends GetxController
       _animationController.reset();
       _animationController.forward().whenComplete(nextQuestion);
     } else {
-      if (questions.length == numOfCorrectAns) {
+      if (questions.length == numOfCorrectAns || wrongQuestions.length < 4) {
         _isEnd = true;
       }
+
       if (_numOfCorrectAns == questions.length) {
         List<String> keys =
             List.generate(questions.length, (index) => index.toString());

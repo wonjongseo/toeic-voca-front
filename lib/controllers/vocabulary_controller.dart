@@ -102,40 +102,47 @@ class VocabularyController extends GetxController {
     return vocabulary;
   }
 
-  void addLikeVocabulary(String id, Vocabulary vocabulary) {
-    toogleLike(id);
-
+  void addLikeVocabulary(Vocabulary vocabulary) {
     Vocabulary newVoca = Vocabulary.mine(
         word: vocabulary.word,
         mean: vocabulary.mean,
         id: DateTime.now().microsecondsSinceEpoch.toString());
 
     myVocabularies.add(newVoca);
-    vocabularies[day][step].isLike = !vocabularies[day][step].isLike;
 
     _localDataSource.updateVocabulary(day, vocabulary);
     _localDataSource.addVocabulary(newVoca);
+
+    update();
+  }
+
+  void deleteLikeVocabulary(Vocabulary vocabulary) {
+    String removeId = '';
+    for (int i = 0; i < myVocabularies.length; i++) {
+      if (myVocabularies[i].word == vocabulary.word &&
+          myVocabularies[i].mean == vocabulary.mean) {
+        removeId = myVocabularies[i].id;
+        myVocabularies.removeAt(i);
+        break;
+      }
+    }
+    _localDataSource.updateVocabulary(day, vocabulary);
+    _localDataSource.deleteVocabulary(removeId);
+
+    update();
   }
 
   void toogleLike(String id) {
-    // Vocabulary vocabulary = vocabularies[day][step];
-
     List<Vocabulary> temp = vocabularies[day];
 
     for (Vocabulary vocabulary in temp) {
       if (vocabulary.id == id) {
-        print('-------------------------');
-
-        print('vocabulary: ${vocabulary}');
         vocabulary.isLike = !vocabulary.isLike;
         break;
       }
     }
 
     print(vocabularies[day]);
-
-    print('-------------------------');
-
     update();
   }
 
@@ -150,12 +157,26 @@ class VocabularyController extends GetxController {
       if (myVocabularies[i].id == vocabulary.id) {
         vocabulary = myVocabularies[i];
         myVocabularies.removeAt(i);
+
+        _localDataSource.removeVocabulary(vocabulary);
+
         break;
       }
     }
+    if (vocabulary.id.length > 5) {
+      for (int day = 0; day < vocabularies.length; day++) {
+        for (int index = 0; index < vocabularies[day].length; index++) {
+          if (vocabularies[day][index].word == vocabulary.word &&
+              vocabularies[day][index].mean == vocabulary.mean) {
+            print('vocabulary: ${vocabulary}');
+            print('day: ${day}');
 
+            _localDataSource.updateVocabulary(day, vocabularies[day][index]);
+            break;
+          }
+        }
+      }
+    }
     update();
-
-    _localDataSource.removeVocabulary(vocabulary);
   }
 }

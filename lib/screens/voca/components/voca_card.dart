@@ -60,12 +60,10 @@ class _VocaCardState extends State<VocaCard> {
                   onTap: () {
                     // tts.speak(widget.voca.voca);
                   },
-                  child: const Padding(
-                    padding: EdgeInsets.only(top: 4, left: 4),
-                    child: Icon(
-                      Icons.mic,
-                      size: 23,
-                    ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4, left: 8),
+                    child:
+                        SvgPicture.asset('assets/svg/speaker.svg', height: 20),
                   ),
                 ),
                 widget.voca.isMine
@@ -91,8 +89,7 @@ class _VocaCardState extends State<VocaCard> {
                                   ),
                                 ),
                                 onTap: () {
-                                  controller.addLikeVocabulary(
-                                      widget.voca.id, widget.voca);
+                                  controller.addLikeVocabulary(widget.voca);
                                 },
                               )
                             : InkWell(
@@ -105,7 +102,7 @@ class _VocaCardState extends State<VocaCard> {
                                   ),
                                 ),
                                 onTap: () {
-                                  controller.toogleLike(widget.voca.id);
+                                  controller.deleteLikeVocabulary(widget.voca);
                                 },
                               );
                       })

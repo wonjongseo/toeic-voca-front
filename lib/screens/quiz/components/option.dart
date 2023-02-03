@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:jongseo_toeic/config/constatns.dart';
-import 'package:jongseo_toeic/constants/question_controller.dart';
+import 'package:jongseo_toeic/controllers/question_controller.dart';
 
 class Option extends StatelessWidget {
   const Option(
@@ -19,17 +19,19 @@ class Option extends StatelessWidget {
           Color getTheRightColor() {
             if (qnController.isAnswered) {
               if (index == qnController.correctAns) {
-                return kGreenColor;
+                return Color(0xFF6AC259);
               } else if (index == qnController.selectedAns &&
                   index != qnController.correctAns) {
-                return kRedColor;
+                return Color(0xFFE92E30);
               }
             }
-            return kGrayColor;
+            return Color(0xFFC1C1C1);
           }
 
           IconData getTheRightIcon() {
-            return getTheRightColor() == kRedColor ? Icons.close : Icons.done;
+            return getTheRightColor() == Color(0xFFE92E30)
+                ? Icons.close
+                : Icons.done;
           }
 
           return qnController.isWrong
@@ -42,8 +44,8 @@ class Option extends StatelessWidget {
 
   Container OptionCard(Color getTheRightColor(), IconData getTheRightIcon()) {
     return Container(
-      margin: const EdgeInsets.only(top: kDefaultPadding),
-      padding: const EdgeInsets.all(kDefaultPadding),
+      margin: const EdgeInsets.only(top: 20.0),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
           border: Border.all(color: getTheRightColor()),
           borderRadius: BorderRadius.circular(15)),
@@ -58,12 +60,12 @@ class Option extends StatelessWidget {
               height: 26,
               width: 26,
               decoration: BoxDecoration(
-                  color: getTheRightColor() == kGrayColor
+                  color: getTheRightColor() == Color(0xFFC1C1C1)
                       ? Colors.transparent
                       : getTheRightColor(),
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(color: getTheRightColor())),
-              child: getTheRightColor() == kGrayColor
+              child: getTheRightColor() == Color(0xFFC1C1C1)
                   ? null
                   : Icon(
                       getTheRightIcon(),

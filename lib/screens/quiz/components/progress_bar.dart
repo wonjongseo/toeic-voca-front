@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:jongseo_toeic/config/constatns.dart';
-import 'package:jongseo_toeic/constants/question_controller.dart';
+import 'package:jongseo_toeic/controllers/question_controller.dart';
 
 class ProgressBar extends StatelessWidget {
   const ProgressBar({
@@ -26,15 +26,18 @@ class ProgressBar extends StatelessWidget {
                 builder: (context, constraints) => Container(
                   width: constraints.maxWidth * controller.animation.value,
                   decoration: BoxDecoration(
-                    gradient: kPrimaryGradient,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF46A0AE), Color(0xFF00FFCB)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
                     borderRadius: BorderRadius.circular(50),
                   ),
                 ),
               ),
               Positioned.fill(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: kDefaultPadding / 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 20 / 2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

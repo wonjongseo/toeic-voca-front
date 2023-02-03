@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:jongseo_toeic/config/constatns.dart';
-import 'package:jongseo_toeic/constants/question_controller.dart';
+import 'package:jongseo_toeic/controllers/question_controller.dart';
 import 'package:jongseo_toeic/screens/quiz/components/progress_bar.dart';
 import 'package:jongseo_toeic/screens/quiz/components/question_card.dart';
 
@@ -22,13 +20,12 @@ class Body extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: ProgressBar(),
               ),
-              const SizedBox(height: kDefaultPadding),
+              const SizedBox(height: 20.0),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Obx(
                   (() => Text.rich(
                         TextSpan(
@@ -38,7 +35,7 @@ class Body extends StatelessWidget {
                                 .textTheme
                                 .headlineMedium!
                                 .copyWith(
-                                  color: kSecondaryColor,
+                                  color: Color(0xFF8B94BC),
                                 ),
                             children: [
                               TextSpan(
@@ -47,13 +44,13 @@ class Body extends StatelessWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineSmall!
-                                      .copyWith(color: kSecondaryColor))
+                                      .copyWith(color: Color(0xFF8B94BC)))
                             ]),
                       )),
                 ),
               ),
               const Divider(thickness: 1.5),
-              const SizedBox(height: kDefaultPadding),
+              const SizedBox(height: 20.0),
               Expanded(
                 child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:jongseo_toeic/config/constatns.dart';
-import 'package:jongseo_toeic/constants/question_controller.dart';
+import 'package:jongseo_toeic/controllers/question_controller.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/screens/quiz/quiz_screen.dart';
 import 'package:get/get.dart';
@@ -49,14 +49,14 @@ class ScoreScreen extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .displaySmall!
-                    .copyWith(color: kSecondaryColor),
+                    .copyWith(color: Color(0xFF8B94BC)),
               ),
               Text(
                 "${_qnController.numOfCorrectAns} / ${_qnController.questions.length}",
                 style: Theme.of(context)
                     .textTheme
                     .headlineMedium!
-                    .copyWith(color: kSecondaryColor),
+                    .copyWith(color: Color(0xFF8B94BC)),
               ),
               const Spacer(flex: 1),
               SingleChildScrollView(

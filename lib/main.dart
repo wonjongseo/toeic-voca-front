@@ -19,7 +19,6 @@ void main() async {
       await localDataSource.initVocabulary();
     }
   }
-
   runApp(const MyApp());
 }
 

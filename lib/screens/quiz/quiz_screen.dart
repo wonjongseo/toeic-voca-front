@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
-import 'package:jongseo_toeic/constants/question_controller.dart';
+import 'package:jongseo_toeic/controllers/question_controller.dart';
 import 'package:jongseo_toeic/models/voca/voca.dart';
 import 'package:jongseo_toeic/screens/home/home_screen.dart';
 import 'package:jongseo_toeic/screens/quiz/components/body.dart';

@@ -41,8 +41,11 @@ class Vocabulary extends HiveObject {
   }
 
   Vocabulary.mine({required this.id, required this.word, required this.mean}) {
-    Vocabulary(id: id, word: word, mean: mean, isKnown: false, isLike: false);
+    Vocabulary(id: id, word: word, mean: mean, isKnown: false);
     isMine = true;
+  }
+  Vocabulary.like({required this.id, required this.word, required this.mean}) {
+    Vocabulary(id: id, word: word, mean: mean, isKnown: false);
   }
   @override
   String toString() {

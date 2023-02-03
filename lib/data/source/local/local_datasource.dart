@@ -98,6 +98,11 @@ class LocalDataSource {
     return 30;
   }
 
+  Future<void> deleteAllMyVocabulary() async {
+    final vocabularyBox = Hive.box<Vocabulary>(Vocabulary.myBoxKey);
+    await vocabularyBox.deleteAll(vocabularyBox.keys);
+  }
+
   List<Vocabulary> getVocabularyOfDay(int day) {
     final vocabularyBox = Hive.box<List<Vocabulary>>(Vocabulary.boxKey);
 
@@ -115,6 +120,11 @@ class LocalDataSource {
     return myVocas;
   }
 
+  Future<void> deleteVocabulary(String id) async {
+    final myVocabularyBox = Hive.box<Vocabulary>(Vocabulary.myBoxKey);
+    await myVocabularyBox.delete(id);
+  }
+
   Future<Vocabulary> addVocabulary(Vocabulary vocabulary) async {
     final myVocabularyBox = Hive.box<Vocabulary>(Vocabulary.myBoxKey);
     await myVocabularyBox.put(vocabulary.id, vocabulary);
@@ -123,13 +133,20 @@ class LocalDataSource {
   }
 
   Future<void> updateVocabulary(int day, Vocabulary vocabulary) async {
+    print(' updateVocabulary');
+    print('day: ${day}');
+
     final vocabularyBox = Hive.box<List<Vocabulary>>(Vocabulary.boxKey);
+
     List<Vocabulary> vocas = vocabularyBox.getAt(day) as List<Vocabulary>;
     for (int index = 0; index < vocas.length; index++) {
-      if (vocabulary.word == vocas[index].word &&
-          vocabulary.mean == vocas[index].mean) {
-        vocabulary.isLike = !vocabulary.isLike;
-        vocas[index] = vocabulary;
+      if (vocabulary.id == vocas[index].id) {
+        print('before');
+        print('vocas[index].isLike: ${vocas[index].isLike}');
+
+        vocas[index].isLike = !vocas[index].isLike;
+        print('after');
+        print('vocas[index].isLike: ${vocas[index].isLike}');
         break;
       }
     }
