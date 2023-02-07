@@ -1,8 +1,6 @@
 name: jongseo_toeic
 description: A new Flutter project.
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -43,18 +41,13 @@ dependencies:
   hive_flutter: ^1.1.0
   dio: ^4.0.6
   flutter_dotenv: ^5.0.2
-  http: ^0.13.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_generator: ^2.0.0
   build_runner: ^2.3.3
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the

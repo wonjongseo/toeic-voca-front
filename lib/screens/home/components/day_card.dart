@@ -57,7 +57,7 @@ class DayCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Day $day',
+                  Text('Day ${day + 1}',
                       style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: 20),
                   _progressbar(size, progressValue)

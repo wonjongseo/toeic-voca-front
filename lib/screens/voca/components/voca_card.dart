@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:jongseo_toeic/config/constatns.dart';
 import 'package:jongseo_toeic/controllers/vocabulary_controller.dart';
@@ -20,28 +21,23 @@ class VocaCard extends StatefulWidget {
 }
 
 class _VocaCardState extends State<VocaCard> {
-  // final FlutterTts tts = FlutterTts();
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   setTTS();
-  //   tts.setLanguage('en');
-  //   tts.setSpeechRate(0.4);
-  // }
-
-  // void setTTS() async {
-  //   await tts.setSharedInstance(true);
-  // }
-
-  bool isClick = false;
-  double _height = 100;
-  late WordApiDatasource wordApiDatasource;
-
+  final FlutterTts tts = FlutterTts();
   @override
   void initState() {
     super.initState();
     wordApiDatasource = WordApiDatasource();
+    setTTS();
+    tts.setLanguage('en');
+    tts.setSpeechRate(0.4);
   }
+
+  void setTTS() async {
+    await tts.setSharedInstance(true);
+  }
+
+  bool isClick = false;
+  double _height = 100;
+  late WordApiDatasource wordApiDatasource;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +54,7 @@ class _VocaCardState extends State<VocaCard> {
               children: [
                 InkWell(
                   onTap: () {
-                    // tts.speak(widget.voca.voca);
+                    tts.speak(widget.voca.word);
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 4, left: 8),

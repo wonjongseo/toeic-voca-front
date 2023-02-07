@@ -39,7 +39,6 @@ class QuizScreen extends StatelessWidget {
               } else {
                 Get.offAllNamed(VOCA_STEP_PATH, arguments: {
                   'day': day,
-                  'vocas': Voca.getDay(day),
                 });
               }
             },

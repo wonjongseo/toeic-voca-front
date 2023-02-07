@@ -77,7 +77,7 @@ class _VocasScreenState extends State<VocasScreen> {
       backgroundColor: Colors.white,
       elevation: 0,
       title: Text(
-        'Day $day',
+        'Day ${day + 1}',
         style: const TextStyle(color: Colors.black),
       ),
       leading: IconButton(

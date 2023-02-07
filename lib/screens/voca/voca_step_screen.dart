@@ -20,7 +20,6 @@ class VocaStepScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     VocabularyController vocabularyController = Get.put(VocabularyController());
-    QuestionController _questionController = Get.put(QuestionController());
     var arguments = Get.arguments;
     if (arguments != null && arguments['day'] != null) {
       vocabularyController.day = arguments['day'];
@@ -34,7 +33,7 @@ class VocaStepScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Day ${vocabularyController.day}',
+        title: Text('Day ${vocabularyController.day + 1}',
             style: Theme.of(context).textTheme.bodyLarge),
         foregroundColor: Colors.white,
         backgroundColor: Colors.white,
@@ -46,26 +45,6 @@ class VocaStepScreen extends StatelessWidget {
           ),
           onPressed: getTo,
         ),
-        actions: [
-          InkWell(
-            // onTap:
-            onTap: () {
-              _questionController.map = Question.generateQustion(vocabularies);
-              _questionController.setQuestions();
-              Get.toNamed(QUIZ_PATH, arguments: {'day': -1, 'step': -1});
-            },
-
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Center(
-                child: SvgPicture.asset(
-                  'assets/svg/book.svg',
-                  height: 30,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
       body: GridView.count(
         padding: const EdgeInsets.all(20.0),

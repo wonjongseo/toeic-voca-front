@@ -15,6 +15,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     int daysCount = Voca.getDayCount();
     VocabularyController vocabularyController = Get.put(VocabularyController());
+
     return Scaffold(
         drawer: const MyDrawer(),
         appBar: _appBar(context),
@@ -27,12 +28,8 @@ class HomeScreen extends StatelessWidget {
         children: List.generate(
           controller.countOfDays,
           (index) {
-            if (index == 0) {
-              return Container(margin: const EdgeInsets.only(bottom: 20));
-            } else {
-              // DAY Card
-              return DayCard(day: index);
-            }
+            // DAY Card
+            return DayCard(day: index);
           },
         ),
       );

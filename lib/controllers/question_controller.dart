@@ -58,6 +58,7 @@ class QuestionController extends GetxController
 
   @override
   void onInit() {
+    print('init question');
     vocabularyController = VocabularyController();
 
     _animationController =

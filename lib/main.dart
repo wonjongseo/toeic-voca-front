@@ -12,14 +12,11 @@ void main() async {
 
   LocalDataSource localDataSource = LocalDataSource();
 
-  if (GetPlatform.isDesktop) {
+  if (!await localDataSource.hasData()) {
+    print('didi');
     await localDataSource.initVocabulary();
-  } else {
-    if (!await localDataSource.hasData()) {
-      await localDataSource.initVocabulary();
-    }
   }
   runApp(const MyApp());
 }
 
-// flutter packages pub run build_runner build
+// flutter packages pub run build_runner build --delete-conflicting-outputs

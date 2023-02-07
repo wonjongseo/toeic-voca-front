@@ -2,13 +2,12 @@ import 'package:get/get.dart';
 import 'package:jongseo_toeic/data/source/local/local_datasource.dart';
 import 'package:jongseo_toeic/data/source/local/models/score_hive.dart';
 import 'package:jongseo_toeic/data/source/local/models/vocabulary.dart';
+import 'package:jongseo_toeic/data/source/local/models/vocabularyList.dart';
 
 class VocabularyController extends GetxController {
-  List<List<Vocabulary>> vocabularies = [];
-  List<List<ScoreHive>> scores = [];
   List<Vocabulary> quizVocabularies = [];
   List<Vocabulary> myVocabularies = [];
-
+  List<VocabularyList> db = [];
   late LocalDataSource _localDataSource;
   int day = 0;
   int step = 0;
@@ -19,57 +18,59 @@ class VocabularyController extends GetxController {
   }
 
   init() {
-    vocabularies = _localDataSource.getAllvocabularies();
-    scores = _localDataSource.getAllScoreHive();
+    db = _localDataSource.getAllHiveData();
     myVocabularies = _localDataSource.getMyVocabulary();
   }
 
   void updateScore(int day, int step) {
-    ScoreHive scoreHive = scores[day][step];
+    List<ScoreHive> scores = db[day].scores;
+    ScoreHive scoreHive = scores[step];
     if (scoreHive.currectCount == scoreHive.totalCount) {
       return;
     }
 
     scoreHive.currectCount++;
-    scores[day][step] = scoreHive;
+    scores[step] = scoreHive;
 
     update();
     _localDataSource.updateScore(scoreHive);
   }
 
-  int get countOfDays => vocabularies.length;
+  int get countOfDays => db.length;
 
   int countOfDaysVoca(int day) {
-    return vocabularies[day].length;
+    return db[day].vocas.length;
   }
 
   ScoreHive scoreOfStep(int day, int step) {
+    List<ScoreHive> scores = db[day].scores;
+
     this.day = day;
     this.step = step;
-    ScoreHive scoreHive = scores[this.day][this.step];
+    ScoreHive scoreHive = scores[this.step];
     return scoreHive;
   }
 
   int scoreOfDay(int day) {
-    List<ScoreHive> scoreHiveList = scores[day];
+    List<ScoreHive> scores = db[day].scores;
 
     int totalCount = 0;
 
-    for (ScoreHive scoreHive in scoreHiveList) {
+    for (ScoreHive scoreHive in scores) {
       totalCount += scoreHive.currectCount;
     }
     return totalCount;
   }
 
   List<Vocabulary> getVocabularyOfDay() {
-    return vocabularies[day];
+    return db[day].vocas;
   }
 
   List<Vocabulary> getVocabularyOfStep(int step) {
-    List<Vocabulary> dayOfVocabulary = vocabularies[day];
-    if (scores[day].length == step + 1) {
+    List<Vocabulary> dayOfVocabulary = db[day].vocas;
+    if (db[day].scores.length == step + 1) {
       int start = (step * 10);
-      int end = start + scores[day][step].totalCount;
+      int end = start + db[day].scores[step].totalCount;
       quizVocabularies = dayOfVocabulary.sublist(start, end);
       return quizVocabularies;
     } else {
@@ -82,7 +83,7 @@ class VocabularyController extends GetxController {
   }
 
   Vocabulary getVoca(String id) {
-    Vocabulary vocabulary = vocabularies[day][step];
+    Vocabulary vocabulary = db[day].vocas[step];
 
     print('vocabulary : ${vocabulary}');
 
@@ -133,7 +134,7 @@ class VocabularyController extends GetxController {
   }
 
   void toogleLike(String id) {
-    List<Vocabulary> temp = vocabularies[day];
+    List<Vocabulary> temp = db[day].vocas;
 
     for (Vocabulary vocabulary in temp) {
       if (vocabulary.id == id) {
@@ -142,12 +143,11 @@ class VocabularyController extends GetxController {
       }
     }
 
-    print(vocabularies[day]);
     update();
   }
 
   Vocabulary isReal() {
-    return vocabularies[day][step];
+    return db[day].vocas[step];
   }
 
   void deleteMyVocabulary(Vocabulary vocabulary) {
@@ -164,14 +164,14 @@ class VocabularyController extends GetxController {
       }
     }
     if (vocabulary.id.length > 5) {
-      for (int day = 0; day < vocabularies.length; day++) {
-        for (int index = 0; index < vocabularies[day].length; index++) {
-          if (vocabularies[day][index].word == vocabulary.word &&
-              vocabularies[day][index].mean == vocabulary.mean) {
+      for (int day = 0; day < db.length; day++) {
+        for (int index = 0; index < db[day].vocas.length; index++) {
+          if (db[day].vocas[index].word == vocabulary.word &&
+              db[day].vocas[index].mean == vocabulary.mean) {
             print('vocabulary: ${vocabulary}');
             print('day: ${day}');
 
-            _localDataSource.updateVocabulary(day, vocabularies[day][index]);
+            _localDataSource.updateVocabulary(day, db[day].vocas[index]);
             break;
           }
         }

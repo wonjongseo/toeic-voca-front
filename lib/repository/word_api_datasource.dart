@@ -1,8 +1,3 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
-
-import 'dart:convert';
-import 'dart:html';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jongseo_toeic/core/network.dart';
 
@@ -79,8 +74,10 @@ class WordApiDatasource {
 
   Future<String> getWordDefinition(String word) async {
     String url = '${wordBaseUrl}/${word}/definitions';
-    String key = dotenv.get('X-RAPIDAPI-KEY');
-    String host = dotenv.get('X-RAPIDAPI-HOST');
+    // String key = dotenv.get('X-RAPIDAPI-KEY');
+    // String host = dotenv.get('X-RAPIDAPI-HOST');
+    String key = '05777fab5amsh7852d3761929222p1264c9jsn205b4132badf';
+    String host = 'wordsapiv1.p.rapidapi.com';
 
     Map<String, dynamic> headers = {
       'X-RapidAPI-Key': key,
